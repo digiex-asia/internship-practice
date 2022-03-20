@@ -1,1 +1,1 @@
-# internship-practice
+# internship - practice projects
