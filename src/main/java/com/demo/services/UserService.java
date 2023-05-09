@@ -1,7 +1,7 @@
 package com.demo.services;
 
 import com.demo.common.enums.AppStatus;
-import com.demo.controllers.model.response.MemberDetailResponse;
+import com.demo.controllers.model.response.UserResponse;
 import com.demo.entities.User;
 import org.springframework.data.domain.Page;
 
@@ -17,6 +17,6 @@ public interface UserService {
 
     User getByIdAndNotINACTIVE(String id);
 
-    Page<MemberDetailResponse> getPageMember(String searchKey, String sortField, boolean ascSort, int pageNumber, int pageSize);
+    Page<UserResponse> getPageMember(String searchKey, String sortField, boolean ascSort, int pageNumber, int pageSize);
 
 }

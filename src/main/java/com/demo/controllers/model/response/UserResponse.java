@@ -16,7 +16,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class MemberDetailResponse {
+public class UserResponse {
 
     private String id;
 
@@ -28,35 +28,20 @@ public class MemberDetailResponse {
 
     private UserRole userRole;
 
-    private String nameAvatar;
 
     private AppStatus status;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constant.API_FORMAT_DATE_TIME)
     private Date createdDate;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constant.API_FORMAT_DATE_TIME)
-    private Date updatedDate;
-    public MemberDetailResponse(User user) {
+    public UserResponse(User user) {
         this.id = user.getId();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.email = user.getEmail();
         this.userRole = user.getRole();
-        this.nameAvatar = getNameOfAvatar(user.getFirstName(),user.getLastName());
         this.status = user.getStatus();
         this.createdDate = user.getCreatedDate();
-        this.updatedDate = user.getUpdatedDate();
     }
-    private String getNameOfAvatar(String firstName, String lastName){
-        String nameOfAvatar = "";
-        if(firstName != null && !firstName.isEmpty()){
-            nameOfAvatar += String.valueOf(firstName.charAt(0));
-        }
-        if(lastName != null && !lastName.isEmpty()){
-            nameOfAvatar += String.valueOf(lastName.charAt(0));
-        }
 
-        return nameOfAvatar;
-    }
 }

@@ -43,8 +43,6 @@ public class UserController extends AbstractBaseController {
         this.sessionService = sessionService;
     }
 
-
-
     @AuthorizeValidator({UserRole.ADMIN, UserRole.ADMIN_MEMBER})
     @PostMapping()
     public ResponseEntity<RestAPIResponse> createMember(
@@ -56,7 +54,7 @@ public class UserController extends AbstractBaseController {
         User newMember = userHelper.createMemberAdmin(memberAdmin);
         userService.save(newMember);
 
-        return responseUtil.successResponse(newMember);
+        return responseUtil.successResponse(new UserResponse(newMember));
     }
 
     @AuthorizeValidator({UserRole.ADMIN, UserRole.ADMIN_MEMBER})
@@ -64,14 +62,10 @@ public class UserController extends AbstractBaseController {
     public ResponseEntity<RestAPIResponse> getDetail(
             @PathVariable (name = "id") String id
     ) {
-
         User user = userService.getByIdAndNotINACTIVE(id);
         Validator.notNull(user, RestAPIStatus.NOT_FOUND, "User Not Found");
-
-        return responseUtil.successResponse(user);
+        return responseUtil.successResponse(new UserResponse(user));
     }
-
-
 
     @AuthorizeValidator({UserRole.ADMIN, UserRole.ADMIN_MEMBER})
     @GetMapping()
@@ -84,8 +78,8 @@ public class UserController extends AbstractBaseController {
     ) {
 
         validatePageSize(pageNumber, pageSize);
-        Page<MemberDetailResponse> membersPage = userService.getPageMember(searchKey, sortField, ascSort, pageNumber, pageSize);
-        return responseUtil.successResponse(new PagingResponse(membersPage));
+        Page<UserResponse> userResponses = userService.getPageMember(searchKey, sortField, ascSort, pageNumber, pageSize);
+        return responseUtil.successResponse(new PagingResponse(userResponses));
     }
 
     @AuthorizeValidator(UserRole.ADMIN)
@@ -112,13 +106,11 @@ public class UserController extends AbstractBaseController {
         if (updateMemberRequest.getFirstName() != null && !updateMemberRequest.getFirstName().trim().isEmpty()){
             user.setFirstName(updateMemberRequest.getFirstName().trim());
         }
-
         if (updateMemberRequest.getLastName() != null && !updateMemberRequest.getLastName().trim().isEmpty()){
             user.setLastName(updateMemberRequest.getLastName().trim());
         }
         userService.save(user);
-
-        return responseUtil.successResponse(user);
+        return responseUtil.successResponse(new UserResponse(user));
     }
 
 

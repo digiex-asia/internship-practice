@@ -1,7 +1,7 @@
 package com.demo.repositories;
 
 import com.demo.common.enums.*;
-import com.demo.controllers.model.response.MemberDetailResponse;
+import com.demo.controllers.model.response.UserResponse;
 import com.demo.entities.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,9 +27,9 @@ public interface UserRepository extends JpaRepository<User, String>, JpaSpecific
 
     User findByIdAndStatusNot(String id, AppStatus appStatus);
 
-    @Query("select new com.demo.controllers.model.response.MemberDetailResponse(user) from User user where user.status <> :status and (user.firstName like :searchKey or  user.lastName like :searchKey)")
-    Page<MemberDetailResponse> getUserPaging(@Param(value = "status") AppStatus status,
-                                             @Param(value = "searchKey") String searchKey,
-                                             Pageable pageable);
+    @Query("select new com.demo.controllers.model.response.UserResponse(user) from User user where user.status <> :status and (user.firstName like :searchKey or  user.lastName like :searchKey)")
+    Page<UserResponse> getUserPaging(@Param(value = "status") AppStatus status,
+                                     @Param(value = "searchKey") String searchKey,
+                                     Pageable pageable);
 
 }

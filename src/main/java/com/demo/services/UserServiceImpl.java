@@ -2,7 +2,7 @@ package com.demo.services;
 
 import com.demo.common.enums.AppStatus;
 import com.demo.common.utilities.Constant;
-import com.demo.controllers.model.response.MemberDetailResponse;
+import com.demo.controllers.model.response.UserResponse;
 import com.demo.entities.User;
 import com.demo.repositories.UserRepository;
 import org.springframework.data.domain.Page;
@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<MemberDetailResponse> getPageMember(String searchKey, String sortField, boolean ascSort, int pageNumber, int pageSize) {
+    public Page<UserResponse> getPageMember(String searchKey, String sortField, boolean ascSort, int pageNumber, int pageSize) {
         String properties = "";
         switch (sortField) {
             case Constant.MEMBER_FIRST_NAME:
