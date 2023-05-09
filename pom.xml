@@ -8,12 +8,12 @@
 		<version>2.7.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.supercoder</groupId>
-	<artifactId>supercoder-v2-backend</artifactId>
+	<groupId>com.domo</groupId>
+	<artifactId>domo-spring-boot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>supercoder-v2-backend</name>
-	<description>Supercoder V2 Backend</description>
+	<name>domo-spring-boot</name>
+	<description>Domo Spring Boot</description>
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
