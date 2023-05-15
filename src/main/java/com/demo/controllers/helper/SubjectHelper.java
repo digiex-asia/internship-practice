@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SubjectHelper {
-    public Subject createSubject(CreateSubjectRequest subjectRequest,String studentId) {
+    public Subject createSubject(CreateSubjectRequest subjectRequest, String studentId) {
 
         Subject subject = new Subject();
         subject.setId(UniqueID.getUUID());
@@ -20,20 +20,33 @@ public class SubjectHelper {
         subject.setStudentId(studentId);
 
 
-
         return subject;
     }
 
-    public Subject updateSubject(UpdateSubjectRequest subjectRequest, String studentId,Subject subject) {
+    public Subject updateSubject(UpdateSubjectRequest subjectRequest, String studentId, Subject subject) {
+        if (subjectRequest.getId() != null && !subjectRequest.getId().trim().isEmpty()) {
+            subject.setId(subjectRequest.getId());
 
-        subject.setId(subjectRequest.getId());
+        }
+        if (subjectRequest.getScore() != null) {
+            subject.setScore(subjectRequest.getScore());
 
-        subject.setScore(subjectRequest.getScore());
-        subject.setName(subjectRequest.getName().trim());
-        subject.setNumberOfLessons(subjectRequest.getNumberOfLessons());
-        subject.setStudentId(studentId);
+        }
+        if (subjectRequest.getName() != null && !subjectRequest.getName().trim().isEmpty()) {
+
+            subject.setName(subjectRequest.getName().trim());
+        }
+        if (subjectRequest.getNumberOfLessons() != null) {
+            subject.setNumberOfLessons(subjectRequest.getNumberOfLessons());
+
+        }
+        if (subjectRequest.getStudentId() != null && !subjectRequest.getStudentId().trim().isEmpty()) {
+
+            subject.setStudentId(studentId);
+        }
         return subject;
     }
+
     public Subject createSubjectIfNull(UpdateSubjectRequest subjectRequest, String studentId) {
 
         Subject subject = new Subject();

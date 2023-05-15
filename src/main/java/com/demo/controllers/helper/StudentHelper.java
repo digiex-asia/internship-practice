@@ -39,22 +39,34 @@ public class StudentHelper {
         if (studentRequest.getFirstName() != null && !studentRequest.getFirstName().trim().isEmpty()) {
             student.setFirstName(studentRequest.getFirstName().trim());
         }
-        if (studentRequest.getLastName() == null || studentRequest.getLastName().trim().isEmpty()) {
+        if (studentRequest.getLastName() != null && !studentRequest.getLastName().trim().isEmpty()) {
             student.setFirstName(studentRequest.getLastName());
         }
-        if (studentRequest.getEmail() == null || studentRequest.getEmail().trim().isEmpty()) {
+        if (studentRequest.getEmail() != null && !studentRequest.getEmail().trim().isEmpty()) {
             student.setEmail(studentRequest.getEmail());
 
         }
-        if (studentRequest.getAddress() == null || studentRequest.getAddress().trim().isEmpty()) {
+        if (studentRequest.getAddress() != null && !studentRequest.getAddress().trim().isEmpty()) {
             student.setAddress(studentRequest.getAddress());
 
         }
+        if (studentRequest.getBob() != null ) {
+            student.setBob(studentRequest.getBob());
 
-        student.setBob(studentRequest.getBob());
-        student.setGender(studentRequest.getGender());
-        student.setClassId(studentRequest.getClassId());
-        student.setPhoneNumber(studentRequest.getPhoneNumber());
+        }
+        if (studentRequest.getGender() != null ) {
+            student.setGender(studentRequest.getGender());
+
+        }
+        if (studentRequest.getClassId() != null && !studentRequest.getClassId().trim().isEmpty()) {
+            student.setClassId(studentRequest.getClassId());
+
+        }
+        if (studentRequest.getPhoneNumber() != null && !studentRequest.getPhoneNumber().trim().isEmpty()) {
+            student.setPhoneNumber(studentRequest.getPhoneNumber());
+
+        }
+
         return student;
     }
 
@@ -72,7 +84,7 @@ public class StudentHelper {
             if (p1.getBob().compareTo(p2.getBob()) > 0) {
                 return 1;
             }
-            return -p1.getBob().compareTo(p2.getBob());
+            return - p1.getAvgScore().compareTo(p2.getAvgScore());
         });
         if( listStudent.size() >=3){
             return listStudent.subList(0,3);
