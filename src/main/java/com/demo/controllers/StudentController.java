@@ -7,14 +7,11 @@ import com.demo.common.utilities.RestAPIStatus;
 import com.demo.common.utilities.Validator;
 import com.demo.controllers.helper.StudentHelper;
 import com.demo.controllers.helper.SubjectHelper;
-import com.demo.controllers.model.request.class_.UpdateClassRequest;
 import com.demo.controllers.model.request.student.CreateStudentRequest;
 import com.demo.controllers.model.request.student.UpdateStudentRequest;
 import com.demo.controllers.model.request.subject.CreateSubjectRequest;
-import com.demo.controllers.model.response.ClassResponse;
 import com.demo.controllers.model.response.PagingResponse;
 import com.demo.controllers.model.response.StudentResponse;
-import com.demo.controllers.model.response.UserResponse;
 import com.demo.entities.Class;
 import com.demo.entities.Student;
 import com.demo.entities.Subject;
@@ -50,20 +47,27 @@ public class StudentController extends AbstractBaseController {
         Validator.validateEmail(studentRequest.getEmail());
         Student studentByEmail = studentService.getByEmail(studentRequest.getEmail());
         Validator.mustNull(studentByEmail, RestAPIStatus.EXISTED, "Student existed");
+
         Student studentByPhone = studentService.getByPhoneNumber(studentRequest.getPhoneNumber());
         Validator.mustNull(studentByPhone, RestAPIStatus.EXISTED, "Student existed");
+
         Class class_ = classService.getById(studentRequest.getClassId());
         Validator.notNull(class_, RestAPIStatus.NOT_FOUND, "Class not found");
-        Student newStudent = studentHelper.createStudent(studentRequest);
-        List<Subject> subjects = new ArrayList<Subject>();
-        List<String> listTemp = new ArrayList<String>();
-        studentRequest.getSubjects().forEach(e -> {
-            if (listTemp.contains(e.getName())) {
+        Set<String> checkDuplicate = new HashSet<>();
+        for (CreateSubjectRequest subject : studentRequest.getSubjects()) {
+            if (!checkDuplicate.add(subject.getName())) {
                 throw new ApplicationException(RestAPIStatus.EXISTED, "Subject existed with student");
             }
+
+        }
+
+        Student newStudent = studentHelper.createStudent(studentRequest);
+        List<Subject> subjects = new ArrayList<Subject>();
+
+        studentRequest.getSubjects().forEach(e -> {
             Subject subject = subjectHelper.createSubject(e, newStudent.getId());
             subjects.add(subject);
-            listTemp.add(e.getName());
+
         });
         studentService.save(newStudent);
         subjectService.saveAll(subjects);
@@ -114,7 +118,6 @@ public class StudentController extends AbstractBaseController {
             }
             listStudentResponse.add(new StudentResponse(e, subjects, avgScore));
         });
-
         List<StudentResponse> listStudent = listStudentResponse.stream()
                 .filter(e -> e.getAvgScore() > 8.5 && e.getAvgScore() < 10)
                 .collect(Collectors.toList());
