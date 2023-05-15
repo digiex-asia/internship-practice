@@ -30,7 +30,7 @@ import javax.validation.Valid;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@RequestMapping("/api/student")
+@RequestMapping(ApiPath.STUDENT_API)
 @RestController
 public class StudentController extends AbstractBaseController {
     @Autowired
@@ -54,19 +54,14 @@ public class StudentController extends AbstractBaseController {
         Validator.mustNull(studentByPhone, RestAPIStatus.EXISTED, "Student existed");
         Class class_ = classService.getById(studentRequest.getClassId());
         Validator.notNull(class_, RestAPIStatus.NOT_FOUND, "Class not found");
-
         Student newStudent = studentHelper.createStudent(studentRequest);
-
         List<Subject> subjects = new ArrayList<Subject>();
         List<String> listTemp = new ArrayList<String>();
         studentRequest.getSubjects().forEach(e -> {
-
-
             if (listTemp.contains(e.getName())) {
                 throw new ApplicationException(RestAPIStatus.EXISTED, "Subject existed with student");
             }
             Subject subject = subjectHelper.createSubject(e, newStudent.getId());
-
             subjects.add(subject);
             listTemp.add(e.getName());
         });
@@ -81,11 +76,10 @@ public class StudentController extends AbstractBaseController {
     ) {
         Student student = studentService.findById(id);
         Validator.notNull(student, RestAPIStatus.NOT_FOUND, "User Not Found");
-
         return responseUtil.successResponse(new StudentResponse(student, subjectService.findAllByStudentId(student.getId())));
     }
 
-    @GetMapping(path = "/studentByClass" + ApiPath.ID)
+    @GetMapping(path = ApiPath.STUDENT_BY_CLASS + ApiPath.ID)
     public ResponseEntity<RestAPIResponse> getListStudentByClassId(
             @PathVariable(name = "id") String id
     ) {
@@ -93,42 +87,31 @@ public class StudentController extends AbstractBaseController {
         Validator.notNull(class_, RestAPIStatus.NOT_FOUND, "Class Not Found");
         List<Student> students = studentService.findAllByClassId(class_.getId());
         List<StudentResponse> listStudentByClassId = new ArrayList<>();
-
         students.forEach(e -> {
-
             List<Subject> subjects = subjectService.findAllByStudentId(e.getId());
             Double totalScore = subjects.stream().mapToDouble(Subject::getScore).sum();
-
             Double avgScore = totalScore / subjects.size();
             if (Double.isNaN(avgScore)) {
                 avgScore = 0.0;
-
             }
-
             listStudentByClassId.add(new StudentResponse(e, subjects, avgScore));
         });
         listStudentByClassId.sort(Comparator.comparing(StudentResponse::getAvgScore, Comparator.reverseOrder()));
         return responseUtil.successResponse(listStudentByClassId);
     }
 
-    @GetMapping(path = "/getTop3Excellent")
+    @GetMapping(path = ApiPath.STUDENT_TOP_3_EXCELLENT_API)
     public ResponseEntity<RestAPIResponse> getTop3Excellent(
     ) {
-
         List<Student> students = studentService.findAllByStatus(AppStatus.ACTIVE);
         List<StudentResponse> listStudentResponse = new ArrayList<>();
-
         students.forEach(e -> {
-
             List<Subject> subjects = subjectService.findAllByStudentId(e.getId());
             Double totalScore = subjects.stream().mapToDouble(Subject::getScore).sum();
-
             Double avgScore = totalScore / subjects.size();
             if (Double.isNaN(avgScore)) {
                 avgScore = 0.0;
-
             }
-
             listStudentResponse.add(new StudentResponse(e, subjects, avgScore));
         });
 
@@ -138,115 +121,87 @@ public class StudentController extends AbstractBaseController {
         return responseUtil.successResponse(studentHelper.sortList(listStudent));
     }
 
-    @GetMapping(path = "/getTop3Good")
+    @GetMapping(path = ApiPath.STUDENT_TOP_3_GOOD_API)
     public ResponseEntity<RestAPIResponse> getTop3Good(
     ) {
-
         List<Student> students = studentService.findAllByStatus(AppStatus.ACTIVE);
         List<StudentResponse> listStudentResponse = new ArrayList<>();
-
         students.forEach(e -> {
-
             List<Subject> subjects = subjectService.findAllByStudentId(e.getId());
             Double totalScore = subjects.stream().mapToDouble(Subject::getScore).sum();
-
             Double avgScore = totalScore / subjects.size();
             if (Double.isNaN(avgScore)) {
                 avgScore = 0.0;
-
             }
-
             listStudentResponse.add(new StudentResponse(e, subjects, avgScore));
         });
-
         List<StudentResponse> listStudent = listStudentResponse.stream()
                 .filter(e -> e.getAvgScore() > 6.5 && e.getAvgScore() <= 8.4)
                 .collect(Collectors.toList());
         return responseUtil.successResponse(studentHelper.sortList(listStudent));
     }
 
-    @GetMapping(path = "/getTop3Average")
+    @GetMapping(path = ApiPath.STUDENT_TOP_3_AVERAGE_API)
     public ResponseEntity<RestAPIResponse> getTop3Average(
     ) {
-
         List<Student> students = studentService.findAllByStatus(AppStatus.ACTIVE);
         List<StudentResponse> listStudentResponse = new ArrayList<>();
-
         students.forEach(e -> {
-
             List<Subject> subjects = subjectService.findAllByStudentId(e.getId());
             Double totalScore = subjects.stream().mapToDouble(Subject::getScore).sum();
-
             Double avgScore = totalScore / subjects.size();
             if (Double.isNaN(avgScore)) {
                 avgScore = 0.0;
-
             }
-
             listStudentResponse.add(new StudentResponse(e, subjects, avgScore));
         });
-
         List<StudentResponse> listStudent = listStudentResponse.stream()
                 .filter(e -> e.getAvgScore() > 5.0 && e.getAvgScore() <= 6.4)
                 .collect(Collectors.toList());
         return responseUtil.successResponse(studentHelper.sortList(listStudent));
     }
 
-    @GetMapping(path = "/getTop3Weak")
+    @GetMapping(path = ApiPath.STUDENT_TOP_3_WEAK_API)
     public ResponseEntity<RestAPIResponse> getTop3Weak(
     ) {
-
         List<Student> students = studentService.findAllByStatus(AppStatus.ACTIVE);
         List<StudentResponse> listStudentResponse = new ArrayList<>();
-
         students.forEach(e -> {
-
             List<Subject> subjects = subjectService.findAllByStudentId(e.getId());
             Double totalScore = subjects.stream().mapToDouble(Subject::getScore).sum();
-
             Double avgScore = totalScore / subjects.size();
             if (Double.isNaN(avgScore)) {
                 avgScore = 0.0;
-
             }
-
             listStudentResponse.add(new StudentResponse(e, subjects, avgScore));
         });
-
         List<StudentResponse> listStudent = listStudentResponse.stream()
                 .filter(e -> e.getAvgScore() > 2.5 && e.getAvgScore() <= 4.9)
                 .collect(Collectors.toList());
         return responseUtil.successResponse(studentHelper.sortList(listStudent));
     }
 
-    @GetMapping(path = "/getTop3Poor")
+    @GetMapping(path = ApiPath.STUDENT_TOP_3_POOR_API)
     public ResponseEntity<RestAPIResponse> getTop3Poor(
     ) {
-
         List<Student> students = studentService.findAllByStatus(AppStatus.ACTIVE);
         List<StudentResponse> listStudentResponse = new ArrayList<>();
-
         students.forEach(e -> {
-
             List<Subject> subjects = subjectService.findAllByStudentId(e.getId());
             Double totalScore = subjects.stream().mapToDouble(Subject::getScore).sum();
-
             Double avgScore = totalScore / subjects.size();
             if (Double.isNaN(avgScore)) {
                 avgScore = 0.0;
-
             }
-
             listStudentResponse.add(new StudentResponse(e, subjects, avgScore));
         });
-
         List<StudentResponse> listStudent = listStudentResponse.stream()
                 .filter(e -> e.getAvgScore() < 2.5)
                 .collect(Collectors.toList());
         return responseUtil.successResponse(studentHelper.sortList(listStudent));
     }
 
-    @GetMapping(path = "/pagingStudentByClass" + ApiPath.ID)
+    @GetMapping(path = ApiPath.PAGE_STUDENT_BY_CLASS + ApiPath.ID)
     public ResponseEntity<RestAPIResponse> getPages(@PathVariable(name = "id") String classId,
                                                     @RequestParam(name = "asc_sort", required = false, defaultValue = "false")
                                                     boolean ascSort,
@@ -263,7 +218,6 @@ public class StudentController extends AbstractBaseController {
                                                     @RequestParam(name = "page_size", required = false, defaultValue = "10")
                                                     int pageSize
     ) {
-
         Class class_ = classService.getById(classId);
         Validator.notNull(class_, RestAPIStatus.NOT_FOUND, "Class not found");
         validatePageSize(pageNumber, pageSize);
@@ -279,8 +233,6 @@ public class StudentController extends AbstractBaseController {
         Student student = studentService.findById(id);
         Validator.validateEmail(studentRequest.getEmail());
         Validator.notNull(student, RestAPIStatus.NOT_FOUND, "Student not found");
-
-
         Student studentSave = studentHelper.updateStudent(student, studentRequest);
         List<Subject> subjects = new ArrayList<Subject>();
 
@@ -291,7 +243,6 @@ public class StudentController extends AbstractBaseController {
             });
             subjectService.saveAll(subjectsUpdate);
         } else {
-
             List<String> listTemp = new ArrayList<String>();
             studentRequest.getSubjects().forEach(e -> {
                 Subject subjectCheck = subjectService.findById(e.getId());
@@ -303,19 +254,16 @@ public class StudentController extends AbstractBaseController {
                         throw new ApplicationException(RestAPIStatus.EXISTED, "Subject existed with student");
                     }
                     subjects.add(subjectHelper.createSubjectIfNull(e, studentSave.getId()));
-
                 }
             });
-
         }
         studentService.save(studentSave);
         subjectService.saveAll(subjects);
-
         return responseUtil.successResponse(new StudentResponse(studentSave, subjects));
     }
 
     @DeleteMapping(path = ApiPath.ID)
-    public ResponseEntity<RestAPIResponse> deleteMember(
+    public ResponseEntity<RestAPIResponse> deleteStudent(
             @PathVariable(name = "id") String id
     ) {
         Student student = studentService.findById(id);

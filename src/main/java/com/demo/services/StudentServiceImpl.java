@@ -17,7 +17,6 @@ import java.util.List;
 public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentRepository studentRepository;
-
     @Override
     public void save(Student student) {
         studentRepository.save(student);
@@ -25,9 +24,8 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student findById(String id) {
-        return studentRepository.findById(id).orElse(null);
+        return studentRepository.findByIdAndStatus(id,AppStatus.ACTIVE);
     }
-
     @Override
     public List<Student> findAllByClassId(String id) {
         return studentRepository.findAllByClassId(id);
@@ -62,12 +60,6 @@ public class StudentServiceImpl implements StudentService {
         Sort sort = Sort.by(direction, properties);
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
         return studentRepository.getStudentPaging(email, phone, classId, "%" + searchKey + "%", pageable);
-    }
-
-
-    @Override
-    public List<Student> findAll() {
-        return studentRepository.findAll();
     }
 
     @Override

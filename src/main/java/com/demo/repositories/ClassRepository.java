@@ -30,4 +30,6 @@ public interface ClassRepository extends JpaRepository<Class, String>, JpaSpecif
 
 
     List<Class> findAllByStatus(AppStatus status);
+
+    Class findByIdAndStatus(String id, AppStatus active);
 }

@@ -56,10 +56,18 @@ public class ClassServiceImpl implements ClassService {
         return classRepository.getUserPaging(AppStatus.ACTIVE,"%" + searchKey + "%", pageable);
     }
 
-
-
     @Override
     public List<Class> findAllByStatus(AppStatus status) {
         return classRepository.findAllByStatus(status);
+    }
+
+    @Override
+    public Class getByIdAndStatus(String id, AppStatus active) {
+        return classRepository.findByIdAndStatus(id,active);
+    }
+
+    @Override
+    public Class findById(String id) {
+        return classRepository.findByIdAndStatus(id,AppStatus.ACTIVE);
     }
 }

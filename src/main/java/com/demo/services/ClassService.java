@@ -19,9 +19,9 @@ public interface ClassService {
 
     Page<ClassResponse> getPageMember(String searchKey, String sortField, boolean ascSort, int pageNumber, int pageSize);
 
-
-
     List<Class> findAllByStatus(AppStatus status);
 
+    Class getByIdAndStatus(String id, AppStatus active);
 
+    Class findById(String id);
 }

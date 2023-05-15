@@ -9,12 +9,7 @@ import java.util.List;
 
 public interface StudentService {
 
-
-
-
     Student getByEmail(String email);
-
-
 
     Student getByPhoneNumber(String phoneNumber);
 
@@ -25,12 +20,6 @@ public interface StudentService {
     List<Student> findAllByClassId(String id);
 
     Page<StudentResponse> getPageMember(String email,String phone,String ClassId,String searchKey, String sortField, boolean ascSort, int pageNumber, int pageSize);
-
-
-
-
-
-    List<Student> findAll();
 
     void saveAll(List<Student> students);
 

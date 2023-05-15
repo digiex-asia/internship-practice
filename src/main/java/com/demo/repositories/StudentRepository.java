@@ -43,4 +43,7 @@ public interface StudentRepository extends JpaRepository<Student, String>, JpaSp
     List<Student> findAllByIdAndStatus(String id, AppStatus status);
 
     List<Student> findAllByStatus(AppStatus active);
+
+
+    Student findByIdAndStatus(String id, AppStatus active);
 }

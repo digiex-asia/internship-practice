@@ -25,7 +25,7 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
-@RequestMapping("/api/class")
+@RequestMapping(ApiPath.CLASS_API)
 @RestController
 public class ClassController extends AbstractBaseController {
     @Autowired
@@ -36,7 +36,6 @@ public class ClassController extends AbstractBaseController {
     StudentService studentService;
     @Autowired
     ClassHelper classHelper;
-
     @PostMapping("")
     public ResponseEntity<RestAPIResponse> createClass(@Valid @RequestBody CreateClassRequest classRequest) {
         Class class_ = classService.getByName(classRequest.getName());
@@ -45,22 +44,19 @@ public class ClassController extends AbstractBaseController {
         classService.save(newClass_);
         return responseUtil.successResponse(new ClassResponse(newClass_));
     }
-
     @GetMapping(path = ApiPath.ID)
     public ResponseEntity<RestAPIResponse> getDetail(
             @PathVariable(name = "id") String id
     ) {
         Class class_ = classService.getById(id);
         Validator.notNull(class_, RestAPIStatus.NOT_FOUND, "Class Not Found");
-
         return responseUtil.successResponse(new ClassResponse(class_, studentService.findAllByClassId(class_.getId())));
     }
-
     @DeleteMapping(path = ApiPath.ID)
-    public ResponseEntity<RestAPIResponse> deleteMember(
+    public ResponseEntity<RestAPIResponse> deleteClass(
             @PathVariable(name = "id") String id
     ) {
-        Class class_ = classService.getById(id);
+        Class class_ = classService.findById(id);
         Validator.notNull(class_, RestAPIStatus.NOT_FOUND, "Class Not Found");
         class_.setStatus(AppStatus.INACTIVE);
         classService.save(class_);
@@ -74,7 +70,6 @@ public class ClassController extends AbstractBaseController {
         studentService.saveAll(students);
         return responseUtil.successResponse("Delete OK");
     }
-
     @GetMapping()
     public ResponseEntity<RestAPIResponse> getPages(
             @RequestParam(name = "asc_sort", required = false, defaultValue = "false") boolean ascSort,
@@ -88,8 +83,7 @@ public class ClassController extends AbstractBaseController {
         Page<ClassResponse> classResponses = classService.getPageMember(searchKey, sortField, ascSort, pageNumber, pageSize);
         return responseUtil.successResponse(new PagingResponse(classResponses));
     }
-
-    @GetMapping("/all")
+    @GetMapping(ApiPath.CLASS_API + ApiPath.ALL)
     public ResponseEntity<RestAPIResponse> getAllClass(
 
     ) {
@@ -99,10 +93,8 @@ public class ClassController extends AbstractBaseController {
             List<Student> students = studentService.findAllByClassId(e.getId());
             allClassDetails.add(new ClassDetailsResponse(e.getId(), e.getName(), e.getMaxSudent(), e.getStatus(), students));
         });
-
         return responseUtil.successResponse(allClassDetails);
     }
-
     @PutMapping(path = ApiPath.ID)
     public ResponseEntity<RestAPIResponse> updateClass(@PathVariable(name = "id") String id, @Valid @RequestBody UpdateClassRequest classRequest) {
         Class class_ = classService.getById(id);

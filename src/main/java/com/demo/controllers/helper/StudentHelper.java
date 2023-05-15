@@ -50,11 +50,11 @@ public class StudentHelper {
             student.setAddress(studentRequest.getAddress());
 
         }
-        if (studentRequest.getBob() != null ) {
+        if (studentRequest.getBob() != null) {
             student.setBob(studentRequest.getBob());
 
         }
-        if (studentRequest.getGender() != null ) {
+        if (studentRequest.getGender() != null) {
             student.setGender(studentRequest.getGender());
 
         }
@@ -84,10 +84,10 @@ public class StudentHelper {
             if (p1.getBob().compareTo(p2.getBob()) > 0) {
                 return 1;
             }
-            return - p1.getAvgScore().compareTo(p2.getAvgScore());
+            return -p1.getAvgScore().compareTo(p2.getAvgScore());
         });
-        if( listStudent.size() >=3){
-            return listStudent.subList(0,3);
+        if (listStudent.size() >= 3) {
+            return listStudent.subList(0, 3);
         }
         return listStudent;
     }
