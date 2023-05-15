@@ -55,12 +55,10 @@ public class StudentController extends AbstractBaseController {
         Validator.notNull(class_, RestAPIStatus.NOT_FOUND, "Class not found");
         Set<String> checkDuplicate = new HashSet<>();
         for (CreateSubjectRequest subject : studentRequest.getSubjects()) {
-            if (!checkDuplicate.add(subject.getName())) {
+            if (!checkDuplicate.add(subject.getName().toLowerCase())) {
                 throw new ApplicationException(RestAPIStatus.EXISTED, "Subject existed with student");
             }
-
         }
-
         Student newStudent = studentHelper.createStudent(studentRequest);
         List<Subject> subjects = new ArrayList<Subject>();
 
