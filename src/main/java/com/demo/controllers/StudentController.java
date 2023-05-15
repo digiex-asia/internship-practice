@@ -30,7 +30,7 @@ import javax.validation.Valid;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@RequestMapping("/student")
+@RequestMapping("/api/student")
 @RestController
 public class StudentController extends AbstractBaseController {
     @Autowired
@@ -115,7 +115,7 @@ public class StudentController extends AbstractBaseController {
     public ResponseEntity<RestAPIResponse> getTop3Excellent(
     ) {
 
-        List<Student> students = studentService.findAll();
+        List<Student> students = studentService.findAllByStatus(AppStatus.ACTIVE);
         List<StudentResponse> listStudentResponse = new ArrayList<>();
 
         students.forEach(e -> {
@@ -142,7 +142,7 @@ public class StudentController extends AbstractBaseController {
     public ResponseEntity<RestAPIResponse> getTop3Good(
     ) {
 
-        List<Student> students = studentService.findAll();
+        List<Student> students = studentService.findAllByStatus(AppStatus.ACTIVE);
         List<StudentResponse> listStudentResponse = new ArrayList<>();
 
         students.forEach(e -> {
@@ -169,7 +169,7 @@ public class StudentController extends AbstractBaseController {
     public ResponseEntity<RestAPIResponse> getTop3Average(
     ) {
 
-        List<Student> students = studentService.findAll();
+        List<Student> students = studentService.findAllByStatus(AppStatus.ACTIVE);
         List<StudentResponse> listStudentResponse = new ArrayList<>();
 
         students.forEach(e -> {
@@ -196,7 +196,7 @@ public class StudentController extends AbstractBaseController {
     public ResponseEntity<RestAPIResponse> getTop3Weak(
     ) {
 
-        List<Student> students = studentService.findAll();
+        List<Student> students = studentService.findAllByStatus(AppStatus.ACTIVE);
         List<StudentResponse> listStudentResponse = new ArrayList<>();
 
         students.forEach(e -> {
@@ -223,7 +223,7 @@ public class StudentController extends AbstractBaseController {
     public ResponseEntity<RestAPIResponse> getTop3Poor(
     ) {
 
-        List<Student> students = studentService.findAll();
+        List<Student> students = studentService.findAllByStatus(AppStatus.ACTIVE);
         List<StudentResponse> listStudentResponse = new ArrayList<>();
 
         students.forEach(e -> {

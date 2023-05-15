@@ -53,8 +53,6 @@ public class UpdateStudentRequest {
     @NotBlank(message = ParamError.FIELD_NAME)
     private String phoneNumber;
     @NotNull(message = ParamError.FIELD_NAME)
-    private AppStatus status;
-    @NotNull(message = ParamError.FIELD_NAME)
 
     private String classId;
     @Size(max = 5, message = ParamError.MAX_VALUE)

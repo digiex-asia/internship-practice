@@ -39,8 +39,15 @@ public class SpringDocOpenApiConfig {
     public GroupedOpenApi userApi() {
         return GroupedOpenApi.builder().group("User").pathsToMatch("/api/user/**").build();
     }
+    @Bean
+    public GroupedOpenApi classApi() {
+        return GroupedOpenApi.builder().group("Class").pathsToMatch("/api/class/**").build();
+    }
 
-
+    @Bean
+    public GroupedOpenApi studentApi() {
+        return GroupedOpenApi.builder().group("Student").pathsToMatch("/api/student/**").build();
+    }
     @Bean
     public OpenAPI applicationOpenAPI() {
         final String securitySchemeName = Constant.HEADER_TOKEN;

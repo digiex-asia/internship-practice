@@ -1,5 +1,6 @@
 package com.demo.services;
 
+import com.demo.common.enums.AppStatus;
 import com.demo.controllers.model.response.StudentResponse;
 import com.demo.entities.Student;
 import org.springframework.data.domain.Page;
@@ -32,4 +33,6 @@ public interface StudentService {
     List<Student> findAll();
 
     void saveAll(List<Student> students);
+
+    List<Student> findAllByStatus(AppStatus active);
 }

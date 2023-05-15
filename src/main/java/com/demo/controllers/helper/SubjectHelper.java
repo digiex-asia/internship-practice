@@ -27,7 +27,7 @@ public class SubjectHelper {
     public Subject updateSubject(UpdateSubjectRequest subjectRequest, String studentId,Subject subject) {
 
         subject.setId(subjectRequest.getId());
-        subject.setStatus(AppStatus.ACTIVE);
+
         subject.setScore(subjectRequest.getScore());
         subject.setName(subjectRequest.getName().trim());
         subject.setNumberOfLessons(subjectRequest.getNumberOfLessons());

@@ -36,8 +36,5 @@ public class UpdateSubjectRequest {
     private Integer numberOfLessons;
 
     @NotNull(message = ParamError.FIELD_NAME)
-    private AppStatus status;
-
-    @NotNull(message = ParamError.FIELD_NAME)
     private String studentId;
 }

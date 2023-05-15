@@ -35,7 +35,6 @@ public class CreateSubjectRequest {
 
     private Integer numberOfLessons;
 
-    @NotNull(message = ParamError.FIELD_NAME)
-    private AppStatus status;
+
 
 }

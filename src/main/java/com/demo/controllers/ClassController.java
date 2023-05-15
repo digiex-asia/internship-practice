@@ -25,7 +25,7 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
-@RequestMapping("/class")
+@RequestMapping("/api/class")
 @RestController
 public class ClassController extends AbstractBaseController {
     @Autowired
@@ -64,11 +64,11 @@ public class ClassController extends AbstractBaseController {
         Validator.notNull(class_, RestAPIStatus.NOT_FOUND, "Class Not Found");
         class_.setStatus(AppStatus.INACTIVE);
         classService.save(class_);
-        List<Student > students=studentService.findAllByClassId(class_.getId());
-        students.forEach(e->{
+        List<Student> students = studentService.findAllByClassId(class_.getId());
+        students.forEach(e -> {
             e.setStatus(AppStatus.INACTIVE);
             List<Subject> subjects = subjectService.findAllByStudentId(e.getId());
-            subjects.forEach(i-> i.setStatus(AppStatus.INACTIVE));
+            subjects.forEach(i -> i.setStatus(AppStatus.INACTIVE));
             subjectService.saveAll(subjects);
         });
         studentService.saveAll(students);

@@ -67,13 +67,16 @@ public class StudentHelper {
                 return 1;
             }
             if (p1.getBob().compareTo(p2.getBob()) < 0) {
-                return 1;
+                return -1;
             }
             if (p1.getBob().compareTo(p2.getBob()) > 0) {
-                return -1;
+                return 1;
             }
             return -p1.getBob().compareTo(p2.getBob());
         });
-        return listStudent.subList(0,3);
+        if( listStudent.size() >=3){
+            return listStudent.subList(0,3);
+        }
+        return listStudent;
     }
 }
