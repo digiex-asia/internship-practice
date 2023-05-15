@@ -35,36 +35,38 @@ public class SecurityConfiguration {
                 // don't create session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeHttpRequests((authz) -> authz
-                                // Allow access public resource
-                                .antMatchers(
-                                        HttpMethod.GET,
-                                        "/",
-                                        "/favicon.ico",
-                                        "/**/*.html",
-                                        "/**/*.css",
-                                        "/**/*.js",
-                                        "/**/*.png",
-                                        "/**/*.gif",
-                                        "/public/**",
-                                        "/**/*.json",
-                                        "/**/*.jpg",
-                                        // enable api docs
-                                        "/v3/api-docs/**"
-                                ).permitAll()
-                                // allow CORS option calls
-                                .antMatchers(HttpMethod.OPTIONS, "/api/**").permitAll()
-                                .antMatchers(HttpMethod.POST,
-                                        ApiPath.AUTHENTICATE_API,
-                                        ApiPath.AUTHENTICATE_API + ApiPath.AUTHENTICATE_RESET_PASSWORD,
-                                        ApiPath.AUTHENTICATE_API + ApiPath.AUTHENTICATE_SOCIAL,
-                                        ApiPath.USER_API,"/api/user/**").permitAll()
+                        // Allow access public resource
+                        .antMatchers(
+                                HttpMethod.GET,
+                                "/",
+                                "/favicon.ico",
+                                "/**/*.html",
+                                "/**/*.css",
+                                "/**/*.js",
+                                "/**/*.png",
+                                "/**/*.gif",
+                                "/public/**",
+                                "/**/*.json",
+                                "/**/*.jpg",
+                                // enable api docs
+                                "/v3/api-docs/**"
+                        ).permitAll()
+                        // allow CORS option calls
+                        .antMatchers(HttpMethod.OPTIONS, "/api/**").permitAll()
+                        .antMatchers(HttpMethod.POST,
+                                ApiPath.AUTHENTICATE_API,
+                                ApiPath.AUTHENTICATE_API + ApiPath.AUTHENTICATE_RESET_PASSWORD,
+                                ApiPath.AUTHENTICATE_API + ApiPath.AUTHENTICATE_SOCIAL,
+                                ApiPath.USER_API, "/api/user/**").permitAll()
                         .antMatchers(HttpMethod.GET, "/api/user/**").permitAll()
-                                .antMatchers(HttpMethod.PUT, ApiPath.AUTHENTICATE_API + ApiPath.AUTHENTICATE_RESET_PASSWORD + "/{reset_code}", "/api/user/**").permitAll()
-                                .anyRequest().authenticated()
+                        .antMatchers(HttpMethod.PUT, ApiPath.AUTHENTICATE_API + ApiPath.AUTHENTICATE_RESET_PASSWORD + "/{reset_code}", "/api/user/**").permitAll()
+//                        .anyRequest().authenticated()
+
+
                 )
                 .httpBasic(withDefaults());
         // Custom JWT based security filter
-        httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+//        httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
 
         // disable page caching
         httpSecurity.headers().cacheControl();

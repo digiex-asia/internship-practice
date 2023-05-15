@@ -113,6 +113,7 @@ public class Validator {
             return matcher.matches();
         }
     }
+
     public static void checkFileExtensionType(MultipartFile file, String[] extensions) {
         // get extension
         String extensionType = AppUtil.getFileExtension(file);

@@ -60,7 +60,7 @@ public class UserController extends AbstractBaseController {
     @AuthorizeValidator({UserRole.ADMIN, UserRole.ADMIN_MEMBER})
     @GetMapping(path = ApiPath.ID)
     public ResponseEntity<RestAPIResponse> getDetail(
-            @PathVariable (name = "id") String id
+            @PathVariable(name = "id") String id
     ) {
         User user = userService.getByIdAndNotINACTIVE(id);
         Validator.notNull(user, RestAPIStatus.NOT_FOUND, "User Not Found");
@@ -85,7 +85,7 @@ public class UserController extends AbstractBaseController {
     @AuthorizeValidator(UserRole.ADMIN)
     @DeleteMapping(path = ApiPath.ID)
     public ResponseEntity<RestAPIResponse> deleteMember(
-            @PathVariable (name = "id") String id
+            @PathVariable(name = "id") String id
     ) {
         User user = userService.getByIdAndNotINACTIVE(id);
         Validator.notNull(user, RestAPIStatus.NOT_FOUND, "User Not Found");
@@ -97,16 +97,16 @@ public class UserController extends AbstractBaseController {
     @AuthorizeValidator(UserRole.ADMIN)
     @PutMapping(path = ApiPath.ID)
     public ResponseEntity<RestAPIResponse> updateMember(
-            @PathVariable (name = "id") String id,
+            @PathVariable(name = "id") String id,
             @RequestBody @Valid UpdateMemberRequest updateMemberRequest
     ) {
         User user = userService.getByIdAndNotINACTIVE(id);
         Validator.notNull(user, RestAPIStatus.NOT_FOUND, "User Not Found");
 
-        if (updateMemberRequest.getFirstName() != null && !updateMemberRequest.getFirstName().trim().isEmpty()){
+        if (updateMemberRequest.getFirstName() != null && !updateMemberRequest.getFirstName().trim().isEmpty()) {
             user.setFirstName(updateMemberRequest.getFirstName().trim());
         }
-        if (updateMemberRequest.getLastName() != null && !updateMemberRequest.getLastName().trim().isEmpty()){
+        if (updateMemberRequest.getLastName() != null && !updateMemberRequest.getLastName().trim().isEmpty()) {
             user.setLastName(updateMemberRequest.getLastName().trim());
         }
         userService.save(user);

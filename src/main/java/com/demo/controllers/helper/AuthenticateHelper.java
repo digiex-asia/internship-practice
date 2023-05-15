@@ -38,7 +38,7 @@ public class AuthenticateHelper {
             throw new ApplicationException(RestAPIStatus.UNAUTHORIZED);
         }
         User user = userService.findById(session.getUserId());
-        Validator.notNull(user, RestAPIStatus.UNAUTHORIZED,"");
+        Validator.notNull(user, RestAPIStatus.UNAUTHORIZED, "");
         return new AuthUser(user);
     }
 }

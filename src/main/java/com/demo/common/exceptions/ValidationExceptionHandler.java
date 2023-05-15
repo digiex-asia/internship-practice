@@ -67,9 +67,9 @@ public class ValidationExceptionHandler extends ResponseEntityExceptionHandler {
         final String FIELD_NAME_PATTERN = "\\{fieldName}";
         StringBuilder sb = new StringBuilder();
         List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
-        for(FieldError fieldError: fieldErrors){
+        for (FieldError fieldError : fieldErrors) {
             String message = "";
-            if(fieldError.getDefaultMessage() != null){
+            if (fieldError.getDefaultMessage() != null) {
                 message = fieldError.getDefaultMessage();
                 message = message.replaceFirst(FIELD_NAME_PATTERN, fieldError.getField());
             }
