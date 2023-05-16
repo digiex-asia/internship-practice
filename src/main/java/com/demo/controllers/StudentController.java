@@ -43,7 +43,7 @@ public class StudentController extends AbstractBaseController {
 
     @PostMapping()
     public ResponseEntity<RestAPIResponse> createStudent(@Valid @RequestBody CreateStudentRequest studentRequest) {
-
+        Validator.isDateFormat(studentRequest.getBob());
         Validator.validateEmail(studentRequest.getEmail());
         Student studentByEmail = studentService.getByEmail(studentRequest.getEmail());
         Validator.mustNull(studentByEmail, RestAPIStatus.EXISTED, "Student existed");
@@ -232,6 +232,7 @@ public class StudentController extends AbstractBaseController {
     @PutMapping(path = ApiPath.ID)
     public ResponseEntity<RestAPIResponse> updateStudent(@PathVariable(name = "id") String id, @Valid @RequestBody UpdateStudentRequest studentRequest) {
         Student student = studentService.findById(id);
+        Validator.isDateFormat(studentRequest.getBob());
         Validator.validateEmail(studentRequest.getEmail());
         Validator.notNull(student, RestAPIStatus.NOT_FOUND, "Student not found");
         Student studentSave = studentHelper.updateStudent(student, studentRequest);

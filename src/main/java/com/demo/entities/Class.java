@@ -20,7 +20,7 @@ public class Class extends BaseEntity implements Serializable {
     private String name;
 
     @Column(name = "max_student")
-    private Integer maxSudent;
+    private Integer maxStudent;
     @Column(name = "status", nullable = false, length = 32)
     @Enumerated(EnumType.STRING)
     private AppStatus status;

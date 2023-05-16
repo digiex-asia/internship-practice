@@ -3,6 +3,8 @@ package com.demo.common.exceptions;
 import com.demo.common.utilities.ResponseUtil;
 import com.demo.common.utilities.RestAPIResponse;
 import com.demo.common.utilities.RestAPIStatus;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

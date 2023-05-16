@@ -40,16 +40,18 @@ public class ClassServiceImpl implements ClassService {
     public Page<ClassResponse> getPageMember(String searchKey, String sortField, boolean ascSort, int pageNumber, int pageSize) {
         String properties = "";
         switch (sortField) {
-            case "name":
+            case Constant.SORT_BY_NAME:
                 properties = "name";
                 break;
-            case "maxStudent":
+            case "max_student":
                 properties = "maxStudent";
                 break;
             default:
                 properties = "createdDate";
                 break;
         }
+        System.out.println(sortField);
+        System.out.println(properties);
         Sort.Direction direction = ascSort ? Sort.Direction.ASC : Sort.Direction.DESC;
         Sort sort = Sort.by(direction, properties);
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);

@@ -14,7 +14,7 @@ public class ClassHelper {
         class_.setId(UniqueID.getUUID());
         class_.setStatus(AppStatus.ACTIVE);
         class_.setName(classRequest.getName().trim());
-        class_.setMaxSudent(classRequest.getMax_student());
+        class_.setMaxStudent(classRequest.getMax_student());
 
         return class_;
     }

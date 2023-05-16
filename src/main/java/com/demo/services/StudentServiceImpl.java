@@ -1,6 +1,7 @@
 package com.demo.services;
 
 import com.demo.common.enums.AppStatus;
+import com.demo.common.utilities.Constant;
 import com.demo.controllers.model.response.StudentResponse;
 import com.demo.entities.Student;
 import com.demo.repositories.StudentRepository;
@@ -17,6 +18,7 @@ import java.util.List;
 public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentRepository studentRepository;
+
     @Override
     public void save(Student student) {
         studentRepository.save(student);
@@ -24,8 +26,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student findById(String id) {
-        return studentRepository.findByIdAndStatus(id,AppStatus.ACTIVE);
+        return studentRepository.findByIdAndStatus(id, AppStatus.ACTIVE);
     }
+
     @Override
     public List<Student> findAllByClassId(String id) {
         return studentRepository.findAllByClassId(id);
@@ -36,19 +39,19 @@ public class StudentServiceImpl implements StudentService {
         System.out.println(sortField);
         String properties = "";
         switch (sortField) {
-            case "firstName":
+            case Constant.MEMBER_FIRST_NAME:
                 properties = "firstName";
                 break;
-            case "lastName":
+            case Constant.MEMBER_LAST_NAME:
                 properties = "lastName";
                 break;
-            case "email":
+            case Constant.MEMBER_EMAIL:
                 properties = "email";
                 break;
-            case "bob":
+            case Constant.MEMBER_BOB:
                 properties = "bob";
                 break;
-            case "phone":
+            case Constant.MEMBER_PHONE:
                 properties = "phone";
                 break;
             default:

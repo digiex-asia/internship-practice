@@ -4,7 +4,9 @@ import com.demo.common.exceptions.ApplicationException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -96,7 +98,12 @@ public class Validator {
             throw new ApplicationException(RestAPIStatus.BAD_REQUEST, "Invalid email format");
         }
     }
+    public static void isDateFormat(Date bob) {
 
+        if (Objects.equals(bob.toString(), "1111-11-11")) {
+            throw new ApplicationException(RestAPIStatus.BAD_REQUEST, "Date format must be MM/dd/yy");
+        }
+    }
     private static boolean isEmailFormat(String valueToValidate) {
         // Regex
         String regexExpression = "\\b[\\w.%-]+@[-.\\w]+\\.[A-Za-z]{2,4}\\b";

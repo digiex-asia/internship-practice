@@ -29,5 +29,8 @@ public interface Constant {
     String MEMBER_FIRST_NAME = "firstName";
     String MEMBER_LAST_NAME = "lastName";
     String MEMBER_EMAIL = "email";
+    String MEMBER_BOB = "bob";
+    String MEMBER_PHONE = "phone";
+    String MAX_STUDENT = "maxStudent";
 
 }

@@ -91,7 +91,7 @@ public class ClassController extends AbstractBaseController {
         List<ClassDetailsResponse> allClassDetails = new ArrayList<ClassDetailsResponse>();
         allClass.stream().forEach(e -> {
             List<Student> students = studentService.findAllByClassId(e.getId());
-            allClassDetails.add(new ClassDetailsResponse(e.getId(), e.getName(), e.getMaxSudent(), e.getStatus(), students));
+            allClassDetails.add(new ClassDetailsResponse(e.getId(), e.getName(), e.getMaxStudent(), e.getStatus(), students));
         });
         return responseUtil.successResponse(allClassDetails);
     }
@@ -105,7 +105,7 @@ public class ClassController extends AbstractBaseController {
             class_.setName(classRequest.getName().trim());
         }
         if (classRequest.getMax_student() == null || classRequest.getMax_student() == 0) {
-            class_.setMaxSudent(classRequest.getMax_student());
+            class_.setMaxStudent(classRequest.getMax_student());
         }
         classService.save(class_);
         return responseUtil.successResponse(new ClassResponse(class_));

@@ -3,11 +3,13 @@ package com.demo.controllers.model.request.student;
 import com.demo.common.enums.AppStatus;
 import com.demo.common.enums.Gender;
 import com.demo.common.utilities.Constant;
+import com.demo.common.utilities.FormatDateJsonDeserializer;
 import com.demo.common.utilities.ParamError;
 import com.demo.controllers.model.request.subject.CreateSubjectRequest;
 import com.demo.entities.Subject;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -40,9 +42,8 @@ public class CreateStudentRequest {
 
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constant.API_FORMAT_DATE)
+    @JsonDeserialize(using = FormatDateJsonDeserializer.class)
     private Date bob;
-
-
 
     private String address;
     @Column(name = "gender", length = 45)
