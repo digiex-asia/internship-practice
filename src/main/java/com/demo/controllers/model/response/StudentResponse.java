@@ -20,43 +20,21 @@ import java.util.List;
 @NoArgsConstructor
 public class StudentResponse {
     private String id;
-
     private String firstName;
-
-
     private String lastName;
-
     private String email;
-
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constant.API_FORMAT_DATE)
     private Date bob;
-
-
     private String address;
-
     private Gender gender;
-
-
     private String phoneNumber;
-
     private AppStatus status;
-
     private String classId;
     private Integer countSubject;
     private List<Subject> subjects;
     private Double avgScore;
-    public boolean sortByField(){
 
-//        if (Objects.equals(this.getAvgScore(), avgScore)) {
-//            return this.getBob();
-//        }else{
-//            return this.getAvgScore();
-//        }
-        return this.getAvgScore() >8.5 && this.getAvgScore()  <10;
-    }
     public StudentResponse(Student student) {
-
         this.id = student.getId();
         this.firstName = student.getFirstName();
         this.lastName = student.getLastName();
@@ -66,14 +44,10 @@ public class StudentResponse {
         this.gender = student.getGender();
         this.phoneNumber = student.getPhoneNumber();
         this.status = student.getStatus();
-
         this.classId = student.getClassId();
 
-
     }
-
     public StudentResponse(Student student, List<Subject> subjects) {
-
         this.id = student.getId();
         this.firstName = student.getFirstName();
         this.lastName = student.getLastName();
@@ -86,11 +60,8 @@ public class StudentResponse {
         this.subjects = subjects;
         this.classId = student.getClassId();
         this.countSubject = subjects.size();
-
     }
-
     public StudentResponse(Student student, List<Subject> subjects, Double avgScore) {
-
         this.id = student.getId();
         this.firstName = student.getFirstName();
         this.lastName = student.getLastName();

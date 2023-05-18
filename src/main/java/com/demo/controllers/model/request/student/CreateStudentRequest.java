@@ -37,17 +37,15 @@ public class CreateStudentRequest {
     private String lastName;
     @Size(max = 250, message = ParamError.MAX_LENGTH)
     @NotBlank(message = ParamError.FIELD_NAME)
-
     private String email;
-
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constant.API_FORMAT_DATE)
     @JsonDeserialize(using = FormatDateJsonDeserializer.class)
     private Date bob;
 
     private String address;
-    @Column(name = "gender", length = 45)
-    private Gender gender;
+    @Size(max = 250, message = ParamError.MAX_LENGTH)
+    @NotBlank(message = ParamError.FIELD_NAME)
+    private String gender;
     @Size(max = 12, message = ParamError.MAX_VALUE)
     @Size(min = 8, message = ParamError.MIN_VALUE)
     @NotBlank(message = ParamError.FIELD_NAME)
@@ -58,4 +56,14 @@ public class CreateStudentRequest {
     @Size(max = 5, message = ParamError.MAX_VALUE)
     @Size(min = 3, message = ParamError.MIN_VALUE)
     List<CreateSubjectRequest> subjects;
+
+    public CreateStudentRequest(String email, String firstName, String lastName, Date dob, String phoneNumber, String gender) {
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.bob = dob;
+        this.phoneNumber = phoneNumber;
+        this.gender = gender;
+
+    }
 }

@@ -5,7 +5,8 @@ package com.demo.common.utilities;
  */
 public interface Constant {
     String HEADER_TOKEN = "Auth-Token";
-
+     Object HEADERS_EXCEL = new String[]{"Email", "First Name", "Last name", "Dob", "Phone Number", "Gender", "Math", "Literature", "Medium Score"};
+     String[] HEADERS_EXCEL_TEMPLATE = {"Email", "First Name", "Last name", "Dob", "Phone Number", "Gender", "Math", "Literature", "Medium Score"};
     //  Date
     String API_FORMAT_DATE_TIME = "MM/dd/yyyy hh:mm:ss";
     String API_FORMAT_TIME = "MM/dd/yyyy HH:mm";
@@ -32,5 +33,11 @@ public interface Constant {
     String MEMBER_BOB = "bob";
     String MEMBER_PHONE = "phone";
     String MAX_STUDENT = "maxStudent";
+
+    String GOOD_STUDENT_TOP_3 = "good";
+    String EXCELLENT_STUDENT_TOP_3 = "excellent";
+    String POOR_STUDENT_TOP_3 = "poor";
+    String AVERAGE_STUDENT_TOP_3 = "average";
+    String WEAK_STUDENT_TOP_3 = "weak";
 
 }

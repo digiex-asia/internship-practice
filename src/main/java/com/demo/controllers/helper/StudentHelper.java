@@ -1,6 +1,7 @@
 package com.demo.controllers.helper;
 
 import com.demo.common.enums.AppStatus;
+import com.demo.common.enums.Gender;
 import com.demo.common.utilities.UniqueID;
 import com.demo.controllers.model.request.class_.CreateClassRequest;
 import com.demo.controllers.model.request.student.CreateStudentRequest;
@@ -25,9 +26,9 @@ public class StudentHelper {
         student.setFirstName(studentRequest.getFirstName().trim());
         student.setLastName(studentRequest.getLastName().trim());
         student.setEmail(studentRequest.getEmail().trim());
-        student.setAddress(studentRequest.getAddress().trim());
+        student.setAddress(studentRequest.getAddress());
         student.setBob(studentRequest.getBob());
-        student.setGender(studentRequest.getGender());
+        student.setGender(Gender.valueOf(studentRequest.getGender()));
         student.setClassId(studentRequest.getClassId());
         student.setPhoneNumber(studentRequest.getPhoneNumber());
 
@@ -55,7 +56,7 @@ public class StudentHelper {
 
         }
         if (studentRequest.getGender() != null) {
-            student.setGender(studentRequest.getGender());
+            student.setGender(Gender.valueOf(studentRequest.getGender()));
 
         }
         if (studentRequest.getClassId() != null && !studentRequest.getClassId().trim().isEmpty()) {

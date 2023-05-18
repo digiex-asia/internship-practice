@@ -24,4 +24,8 @@ public interface StudentService {
     void saveAll(List<Student> students);
 
     List<Student> findAllByStatus(AppStatus active);
+
+    List<StudentResponse> getTop3StudentByType(String type);
+
+    List<Student> findAll();
 }

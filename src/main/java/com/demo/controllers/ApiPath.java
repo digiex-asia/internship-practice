@@ -31,11 +31,9 @@ public interface ApiPath {
     String CLASS_API = BASE_API_URL + "/class";
     //Student APis
     String STUDENT_API = BASE_API_URL + "/student";
-    String STUDENT_TOP_3_EXCELLENT_API = STUDENT_API + "/get_top_3_excellent";
-    String STUDENT_TOP_3_GOOD_API = STUDENT_API + "/get_top_3_good";
-    String STUDENT_TOP_3_AVERAGE_API = STUDENT_API + "/get_top_3_average";
-    String STUDENT_TOP_3_WEAK_API = STUDENT_API + "/get_top_3_weak";
-    String STUDENT_TOP_3_POOR_API = STUDENT_API + "/get_top_3_poor";
+
+    String STUDENT_TOP_3_API = STUDENT_API + "/get_top_3";
+
     String PAGE_STUDENT_BY_CLASS = STUDENT_API + "/paging_student_by_class";
     String STUDENT_BY_CLASS = STUDENT_API + "/student_by_class";
 

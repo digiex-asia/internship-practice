@@ -1,5 +1,6 @@
 package com.demo.common.utilities;
 
+import com.demo.common.enums.Gender;
 import com.demo.common.exceptions.ApplicationException;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,6 +36,20 @@ public class Validator {
         if (obj == null) {
             throw new ApplicationException(RestAPIStatus, message);
         }
+    }
+
+    public static void isGenderEnum(String gender, RestAPIStatus RestAPIStatus, String message) {
+        int flag = 0;
+        for (Gender c : Gender.values()) {
+
+            if (c.name().equals(gender)) {
+                flag = 1;
+            }
+        }
+        if (flag == 0) {
+            throw new ApplicationException(RestAPIStatus, message);
+        }
+
     }
 
     /**
@@ -98,12 +113,50 @@ public class Validator {
             throw new ApplicationException(RestAPIStatus.BAD_REQUEST, "Invalid email format");
         }
     }
+
+    public static void validateStringNull(String field) {
+
+        if (field.length() > 65) {
+            throw new ApplicationException(RestAPIStatus.BAD_REQUEST, "Field too long");
+        }
+        if (field.trim().isEmpty()) {
+            throw new ApplicationException(RestAPIStatus.BAD_REQUEST, "Field not null");
+        }
+    }
+
+    public static void validatePhone(String phone) {
+
+        if (!phone.matches("^(\\d{8,12})$")) {
+            throw new ApplicationException(RestAPIStatus.BAD_REQUEST, "Invalid phone format");
+        }
+    }
+
+    public static void validateScore(String score) {
+
+        if (Double.parseDouble(score) > 10 || Double.parseDouble(score) < 0 || !isNumeric(score)) {
+            throw new ApplicationException(RestAPIStatus.BAD_REQUEST, "Invalid score format");
+        }
+    }
+
+    public static boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            double d = Double.parseDouble(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
+    }
+
     public static void isDateFormat(Date bob) {
 
-        if (Objects.equals(bob.toString(), "1111-11-11")) {
+        if (Objects.equals(bob, "1111-11-11")) {
             throw new ApplicationException(RestAPIStatus.BAD_REQUEST, "Date format must be MM/dd/yy");
         }
     }
+
     private static boolean isEmailFormat(String valueToValidate) {
         // Regex
         String regexExpression = "\\b[\\w.%-]+@[-.\\w]+\\.[A-Za-z]{2,4}\\b";
@@ -129,4 +182,12 @@ public class Validator {
         }
     }
 
+    public static void validateMediumScore(String match, String literature, String mediumScore) {
+        if (Double.parseDouble(mediumScore) > 10 || Double.parseDouble(mediumScore) < 0 || !isNumeric(mediumScore)) {
+            throw new ApplicationException(RestAPIStatus.BAD_REQUEST, "Invalid medium score format");
+        }
+        if ((Double.parseDouble(match) + Double.parseDouble(literature)) / 2 != Double.parseDouble(mediumScore)) {
+            throw new ApplicationException(RestAPIStatus.BAD_REQUEST, "Medium score not right");
+        }
+    }
 }

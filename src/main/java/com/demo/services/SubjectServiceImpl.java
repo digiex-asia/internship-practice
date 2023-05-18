@@ -8,9 +8,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class SubjectServiceImpl implements SubjectService{
+public class SubjectServiceImpl implements SubjectService {
     @Autowired
     SubjectRepository subjectRepository;
+
     @Override
     public void saveAll(List<Subject> subjects) {
         subjectRepository.saveAll(subjects);
@@ -29,6 +30,11 @@ public class SubjectServiceImpl implements SubjectService{
     @Override
     public Subject findById(String id) {
         return subjectRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public void save(Subject subject) {
+        subjectRepository.save(subject);
     }
 
 

@@ -41,13 +41,15 @@ public class UpdateStudentRequest {
     @NotBlank(message = ParamError.FIELD_NAME)
 
     private String email;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constant.API_FORMAT_DATE)
     @JsonDeserialize(using = FormatDateJsonDeserializer.class)
     private Date bob;
 
+
     private String address;
 
-    private Gender gender;
+    private String gender;
     @Size(max = 12, message = ParamError.MAX_VALUE)
     @Size(min = 8, message = ParamError.MIN_VALUE)
     @NotBlank(message = ParamError.FIELD_NAME)

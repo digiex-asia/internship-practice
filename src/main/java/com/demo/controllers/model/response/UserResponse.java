@@ -25,15 +25,11 @@ public class UserResponse {
     private String lastName;
 
     private String email;
-
     private UserRole userRole;
-
-
     private AppStatus status;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constant.API_FORMAT_DATE_TIME)
     private Date createdDate;
-
     public UserResponse(User user) {
         this.id = user.getId();
         this.firstName = user.getFirstName();

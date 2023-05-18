@@ -16,22 +16,35 @@ import com.demo.entities.Class;
 import com.demo.entities.Student;
 import com.demo.entities.Subject;
 import com.demo.services.ClassService;
+import com.demo.services.FileService;
 import com.demo.services.StudentService;
 import com.demo.services.SubjectService;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
+
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.core.io.Resource;
 
 import javax.validation.Valid;
+import java.io.*;
+import java.text.ParseException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RequestMapping(ApiPath.STUDENT_API)
 @RestController
 public class StudentController extends AbstractBaseController {
     @Autowired
     StudentService studentService;
+    @Autowired
+    FileService fileService;
     @Autowired
     SubjectService subjectService;
     @Autowired
@@ -42,12 +55,15 @@ public class StudentController extends AbstractBaseController {
     SubjectHelper subjectHelper;
 
     @PostMapping()
-    public ResponseEntity<RestAPIResponse> createStudent(@Valid @RequestBody CreateStudentRequest studentRequest) {
+    public ResponseEntity<RestAPIResponse> createStudent(
+            @Valid @RequestBody CreateStudentRequest studentRequest
+    ) {
         Validator.isDateFormat(studentRequest.getBob());
         Validator.validateEmail(studentRequest.getEmail());
         Student studentByEmail = studentService.getByEmail(studentRequest.getEmail());
         Validator.mustNull(studentByEmail, RestAPIStatus.EXISTED, "Student existed");
 
+        Validator.isGenderEnum(studentRequest.getGender(), RestAPIStatus.BAD_REQUEST, "Invalid name of gender");
         Student studentByPhone = studentService.getByPhoneNumber(studentRequest.getPhoneNumber());
         Validator.mustNull(studentByPhone, RestAPIStatus.EXISTED, "Student existed");
 
@@ -70,6 +86,51 @@ public class StudentController extends AbstractBaseController {
         studentService.save(newStudent);
         subjectService.saveAll(subjects);
         return responseUtil.successResponse(new StudentResponse(newStudent, subjects));
+    }
+
+    @GetMapping(path = "/dowload_template")
+    public ResponseEntity<Resource> dowloadExcel() throws IOException {
+        String filename = "template.csv";
+
+        InputStreamResource file = new InputStreamResource(fileService.createTemplateStudent());
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+                .contentType(MediaType.parseMediaType("application/csv"))
+                .body(file);
+
+
+    }
+
+    @PostMapping(path = "/import", consumes = {"multipart/form-data"})
+    public  ResponseEntity<Resource> uploadExcel(@RequestParam("file") MultipartFile file) throws IOException, ParseException {
+        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+        if (!Objects.equals(extension, "csv")) {
+            throw new ApplicationException(RestAPIStatus.BAD_PARAMS, "File import must be csv");
+        }
+
+        String filename = "fileResponse.csv";
+        InputStreamResource fileResponse = new InputStreamResource(  fileService.readFile(file));
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+                .contentType(MediaType.parseMediaType("application/csv"))
+                .body(fileResponse);
+
+
+    }
+
+    @GetMapping(path = "/export")
+    public ResponseEntity<Resource> exportExcel() throws IOException {
+        String filename = "exportFile.csv";
+
+        InputStreamResource file = new InputStreamResource(fileService.exportExcelAllStudent());
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+                .contentType(MediaType.parseMediaType("application/csv"))
+                .body(file);
+
+
     }
 
     @GetMapping(path = ApiPath.ID)
@@ -102,139 +163,48 @@ public class StudentController extends AbstractBaseController {
         return responseUtil.successResponse(listStudentByClassId);
     }
 
-    @GetMapping(path = ApiPath.STUDENT_TOP_3_EXCELLENT_API)
-    public ResponseEntity<RestAPIResponse> getTop3Excellent(
-    ) {
-        List<Student> students = studentService.findAllByStatus(AppStatus.ACTIVE);
-        List<StudentResponse> listStudentResponse = new ArrayList<>();
-        students.forEach(e -> {
-            List<Subject> subjects = subjectService.findAllByStudentId(e.getId());
-            Double totalScore = subjects.stream().mapToDouble(Subject::getScore).sum();
-            Double avgScore = totalScore / subjects.size();
-            if (Double.isNaN(avgScore)) {
-                avgScore = 0.0;
-            }
-            listStudentResponse.add(new StudentResponse(e, subjects, avgScore));
-        });
-        List<StudentResponse> listStudent = listStudentResponse.stream()
-                .filter(e -> e.getAvgScore() > 8.5 && e.getAvgScore() < 10)
-                .collect(Collectors.toList());
-        return responseUtil.successResponse(studentHelper.sortList(listStudent));
-    }
 
-    @GetMapping(path = ApiPath.STUDENT_TOP_3_GOOD_API)
-    public ResponseEntity<RestAPIResponse> getTop3Good(
-    ) {
-        List<Student> students = studentService.findAllByStatus(AppStatus.ACTIVE);
-        List<StudentResponse> listStudentResponse = new ArrayList<>();
-        students.forEach(e -> {
-            List<Subject> subjects = subjectService.findAllByStudentId(e.getId());
-            Double totalScore = subjects.stream().mapToDouble(Subject::getScore).sum();
-            Double avgScore = totalScore / subjects.size();
-            if (Double.isNaN(avgScore)) {
-                avgScore = 0.0;
-            }
-            listStudentResponse.add(new StudentResponse(e, subjects, avgScore));
-        });
-        List<StudentResponse> listStudent = listStudentResponse.stream()
-                .filter(e -> e.getAvgScore() > 6.5 && e.getAvgScore() <= 8.4)
-                .collect(Collectors.toList());
-        return responseUtil.successResponse(studentHelper.sortList(listStudent));
-    }
-
-    @GetMapping(path = ApiPath.STUDENT_TOP_3_AVERAGE_API)
+    @GetMapping(path = ApiPath.STUDENT_TOP_3_API)
     public ResponseEntity<RestAPIResponse> getTop3Average(
+            @RequestParam("type") String type
     ) {
-        List<Student> students = studentService.findAllByStatus(AppStatus.ACTIVE);
-        List<StudentResponse> listStudentResponse = new ArrayList<>();
-        students.forEach(e -> {
-            List<Subject> subjects = subjectService.findAllByStudentId(e.getId());
-            Double totalScore = subjects.stream().mapToDouble(Subject::getScore).sum();
-            Double avgScore = totalScore / subjects.size();
-            if (Double.isNaN(avgScore)) {
-                avgScore = 0.0;
-            }
-            listStudentResponse.add(new StudentResponse(e, subjects, avgScore));
-        });
-        List<StudentResponse> listStudent = listStudentResponse.stream()
-                .filter(e -> e.getAvgScore() > 5.0 && e.getAvgScore() <= 6.4)
-                .collect(Collectors.toList());
-        return responseUtil.successResponse(studentHelper.sortList(listStudent));
-    }
-
-    @GetMapping(path = ApiPath.STUDENT_TOP_3_WEAK_API)
-    public ResponseEntity<RestAPIResponse> getTop3Weak(
-    ) {
-        List<Student> students = studentService.findAllByStatus(AppStatus.ACTIVE);
-        List<StudentResponse> listStudentResponse = new ArrayList<>();
-        students.forEach(e -> {
-            List<Subject> subjects = subjectService.findAllByStudentId(e.getId());
-            Double totalScore = subjects.stream().mapToDouble(Subject::getScore).sum();
-            Double avgScore = totalScore / subjects.size();
-            if (Double.isNaN(avgScore)) {
-                avgScore = 0.0;
-            }
-            listStudentResponse.add(new StudentResponse(e, subjects, avgScore));
-        });
-        List<StudentResponse> listStudent = listStudentResponse.stream()
-                .filter(e -> e.getAvgScore() > 2.5 && e.getAvgScore() <= 4.9)
-                .collect(Collectors.toList());
-        return responseUtil.successResponse(studentHelper.sortList(listStudent));
-    }
-
-    @GetMapping(path = ApiPath.STUDENT_TOP_3_POOR_API)
-    public ResponseEntity<RestAPIResponse> getTop3Poor(
-    ) {
-        List<Student> students = studentService.findAllByStatus(AppStatus.ACTIVE);
-        List<StudentResponse> listStudentResponse = new ArrayList<>();
-        students.forEach(e -> {
-            List<Subject> subjects = subjectService.findAllByStudentId(e.getId());
-            Double totalScore = subjects.stream().mapToDouble(Subject::getScore).sum();
-            Double avgScore = totalScore / subjects.size();
-            if (Double.isNaN(avgScore)) {
-                avgScore = 0.0;
-            }
-            listStudentResponse.add(new StudentResponse(e, subjects, avgScore));
-        });
-        List<StudentResponse> listStudent = listStudentResponse.stream()
-                .filter(e -> e.getAvgScore() < 2.5)
-                .collect(Collectors.toList());
+        List<StudentResponse> listStudent = studentService.getTop3StudentByType(type);
         return responseUtil.successResponse(studentHelper.sortList(listStudent));
     }
 
     @GetMapping(path = ApiPath.PAGE_STUDENT_BY_CLASS + ApiPath.ID)
-    public ResponseEntity<RestAPIResponse> getPages(@PathVariable(name = "id") String classId,
-                                                    @RequestParam(name = "asc_sort", required = false, defaultValue = "false")
-                                                    boolean ascSort,
-                                                    @RequestParam(name = "sort_field", required = false, defaultValue = "")
-                                                    String sortField,
-                                                    @RequestParam(name = "email", required = false)
-                                                    String email,
-                                                    @RequestParam(name = "phone", required = false)
-                                                    String phone,
-                                                    @RequestParam(name = "search_key", required = false, defaultValue = "")
-                                                    String searchKey,
-                                                    @RequestParam(name = "page_number", required = false, defaultValue = "1")
-                                                    int pageNumber,
-                                                    @RequestParam(name = "page_size", required = false, defaultValue = "10")
-                                                    int pageSize
+    public ResponseEntity<RestAPIResponse> getPages(
+            @PathVariable(name = "id") String classId,
+            @RequestParam(name = "asc_sort", required = false, defaultValue = "false")
+            boolean ascSort,
+            @RequestParam(name = "sort_field", required = false, defaultValue = "")
+            String sortField,
+            @RequestParam(name = "email", required = false)
+            String email,
+            @RequestParam(name = "phone", required = false)
+            String phone,
+            @RequestParam(name = "search_key", required = false, defaultValue = "")
+            String searchKey,
+            @RequestParam(name = "page_number", required = false, defaultValue = "1")
+            int pageNumber,
+            @RequestParam(name = "page_size", required = false, defaultValue = "10")
+            int pageSize
     ) {
         Class class_ = classService.getById(classId);
         Validator.notNull(class_, RestAPIStatus.NOT_FOUND, "Class not found");
         validatePageSize(pageNumber, pageSize);
-        System.out.println(email);
-        System.out.println(phone);
-        System.out.println(classId);
         Page<StudentResponse> userResponses = studentService.getPageMember(email, phone, classId, searchKey, sortField, ascSort, pageNumber, pageSize);
         return responseUtil.successResponse(new PagingResponse(userResponses));
     }
 
     @PutMapping(path = ApiPath.ID)
-    public ResponseEntity<RestAPIResponse> updateStudent(@PathVariable(name = "id") String id, @Valid @RequestBody UpdateStudentRequest studentRequest) {
+    public ResponseEntity<RestAPIResponse> updateStudent(@PathVariable(name = "id") String
+                                                                 id, @Valid @RequestBody UpdateStudentRequest studentRequest) {
         Student student = studentService.findById(id);
         Validator.isDateFormat(studentRequest.getBob());
         Validator.validateEmail(studentRequest.getEmail());
         Validator.notNull(student, RestAPIStatus.NOT_FOUND, "Student not found");
+        Validator.isGenderEnum(studentRequest.getGender(), RestAPIStatus.BAD_REQUEST, "Invalid name of gender");
         Student studentSave = studentHelper.updateStudent(student, studentRequest);
         List<Subject> subjects = new ArrayList<Subject>();
 
@@ -268,6 +238,7 @@ public class StudentController extends AbstractBaseController {
     public ResponseEntity<RestAPIResponse> deleteStudent(
             @PathVariable(name = "id") String id
     ) {
+
         Student student = studentService.findById(id);
         Validator.notNull(student, RestAPIStatus.NOT_FOUND, "Student Not Found");
         student.setStatus(AppStatus.INACTIVE);

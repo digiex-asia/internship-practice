@@ -14,4 +14,5 @@ public interface SubjectService {
     Subject findById(String id);
 
 
+    void save(Subject subject);
 }

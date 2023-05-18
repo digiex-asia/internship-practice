@@ -30,11 +30,11 @@ public class ClassDetailsResponse {
     private Date createdDate;
     private List<Student> students;
 
-    public ClassDetailsResponse(String id, String name, Integer maxStudent,AppStatus status,List<Student> students) {
+    public ClassDetailsResponse(String id, String name, Integer maxStudent, AppStatus status, List<Student> students) {
         this.id = id;
         this.name = name;
         this.maxStudent = maxStudent;
-this.status=status;
+        this.status = status;
         this.students = students;
     }
 

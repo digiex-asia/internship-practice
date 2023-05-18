@@ -1,9 +1,12 @@
 package com.demo.services;
 
 import com.demo.common.enums.AppStatus;
+import com.demo.common.exceptions.ApplicationException;
 import com.demo.common.utilities.Constant;
+import com.demo.common.utilities.RestAPIStatus;
 import com.demo.controllers.model.response.StudentResponse;
 import com.demo.entities.Student;
+import com.demo.entities.Subject;
 import com.demo.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,12 +15,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentRepository studentRepository;
+
+    @Autowired
+    private SubjectService subjectService;
 
     @Override
     public void save(Student student) {
@@ -73,6 +81,59 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public List<Student> findAllByStatus(AppStatus active) {
         return studentRepository.findAllByStatus(active);
+    }
+
+    @Override
+    public List<StudentResponse> getTop3StudentByType(String type) {
+        List<Student> students = this.findAllByStatus(AppStatus.ACTIVE);
+        List<StudentResponse> listStudentResponse = new ArrayList<>();
+        students.forEach(e -> {
+            List<Subject> subjects = subjectService.findAllByStudentId(e.getId());
+            Double totalScore = subjects.stream().mapToDouble(Subject::getScore).sum();
+            Double avgScore = totalScore / subjects.size();
+            if (Double.isNaN(avgScore)) {
+                avgScore = 0.0;
+            }
+            listStudentResponse.add(new StudentResponse(e, subjects, avgScore));
+        });
+        List<StudentResponse> listStudent = null;
+        switch (type) {
+            case Constant.EXCELLENT_STUDENT_TOP_3:
+                listStudent = listStudentResponse.stream()
+                        .filter(e -> e.getAvgScore() > 8.5 && e.getAvgScore() <= 10)
+                        .collect(Collectors.toList());
+                break;
+            case Constant.GOOD_STUDENT_TOP_3:
+                listStudent = listStudentResponse.stream()
+                        .filter(e -> e.getAvgScore() > 6.5 && e.getAvgScore() <= 8.4)
+                        .collect(Collectors.toList());
+                break;
+            case Constant.AVERAGE_STUDENT_TOP_3:
+                listStudent = listStudentResponse.stream()
+                        .filter(e -> e.getAvgScore() > 5.0 && e.getAvgScore() <= 6.4)
+                        .collect(Collectors.toList());
+                break;
+            case Constant.WEAK_STUDENT_TOP_3:
+                listStudent = listStudentResponse.stream()
+                        .filter(e -> e.getAvgScore() > 2.5 && e.getAvgScore() <= 4.9)
+                        .collect(Collectors.toList());
+                break;
+            case Constant.POOR_STUDENT_TOP_3:
+                listStudent = listStudentResponse.stream()
+                        .filter(e -> e.getAvgScore() <= 2.5)
+                        .collect(Collectors.toList());
+                break;
+            default:
+                throw new ApplicationException(RestAPIStatus.BAD_REQUEST, "Invalid name type");
+        }
+        return listStudent;
+
+
+    }
+
+    @Override
+    public List<Student> findAll() {
+        return studentRepository.findAllByStatus(AppStatus.ACTIVE);
     }
 
     @Override

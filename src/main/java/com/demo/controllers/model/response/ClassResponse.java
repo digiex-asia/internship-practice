@@ -36,7 +36,6 @@ public class ClassResponse {
         this.name = class_.getName();
         this.status = class_.getStatus();
         this.maxStudent = class_.getMaxStudent();
-
         this.createdDate = class_.getCreatedDate();
     }
 
@@ -45,7 +44,6 @@ public class ClassResponse {
         this.name = class_.getName();
         this.status = class_.getStatus();
         this.maxStudent = class_.getMaxStudent();
-
         this.createdDate = class_.getCreatedDate();
         this.countStudent = students.size();
     }

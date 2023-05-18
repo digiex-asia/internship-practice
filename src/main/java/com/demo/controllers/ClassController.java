@@ -78,7 +78,6 @@ public class ClassController extends AbstractBaseController {
             @RequestParam(name = "page_number", required = false, defaultValue = "1") int pageNumber,
             @RequestParam(name = "page_size", required = false, defaultValue = "10") int pageSize
     ) {
-
         validatePageSize(pageNumber, pageSize);
         Page<ClassResponse> classResponses = classService.getPageMember(searchKey, sortField, ascSort, pageNumber, pageSize);
         return responseUtil.successResponse(new PagingResponse(classResponses));
