@@ -77,7 +77,6 @@ public class ValidationExceptionHandler extends ResponseEntityExceptionHandler {
         LOGGER.error("handleUncatchException", ex);
         return responseUtil.buildResponse(RestAPIStatus.INTERNAL_SERVER_ERROR, "Please contact System SysAdmin to resolve problem", HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers, HttpStatus status, WebRequest request) {
@@ -93,7 +92,6 @@ public class ValidationExceptionHandler extends ResponseEntityExceptionHandler {
 
             sb.append(message).append("; ");
         }
-
         return new ResponseEntity<Object>(new RestAPIResponse(RestAPIStatus.BAD_REQUEST, sb.toString()), headers, status);
     }
 

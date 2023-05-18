@@ -19,4 +19,5 @@ public interface SubjectRepository extends JpaRepository<Subject, String>, JpaSp
     @Query("DELETE FROM Subject e WHERE e.studentId = :id")
     void deleteByStudentId(String id);
 
+    List<Subject> findAllByStudentIdIn(List<String> ids);
 }

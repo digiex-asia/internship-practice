@@ -30,6 +30,17 @@ public interface StudentRepository extends JpaRepository<Student, String>, JpaSp
 
     List<Student> findAllByClassId(String id);
 
+    @Query("select new com.demo.controllers.model.response.StudentResponse(student,AVG(subject.score))  from Student student  join Subject subject on student.id=subject.studentId where  student.classId=:classId  and  (:phone is null or student.phoneNumber = :phone) and (:email is null or student.email = :email) and( student.lastName like :searchKey or student.firstName like :searchKey) GROUP  BY subject.studentId ORDER BY AVG(subject.score) DESC ")
+    Page<StudentResponse> getStudentPagingDesc(@Param(value = "email") String email, @Param(value = "phone") String phone,
+                                               @Param(value = "classId") String classId,
+                                               @Param(value = "searchKey") String searchKey,
+                                               Pageable pageable);
+
+    @Query("select new com.demo.controllers.model.response.StudentResponse(student,AVG(subject.score))  from Student student  join Subject subject on student.id=subject.studentId where  student.classId=:classId  and  (:phone is null or student.phoneNumber = :phone) and (:email is null or student.email = :email) and( student.lastName like :searchKey or student.firstName like :searchKey) GROUP  BY subject.studentId ORDER BY AVG(subject.score) ASC ")
+    Page<StudentResponse> getStudentPagingAsc(@Param(value = "email") String email, @Param(value = "phone") String phone,
+                                              @Param(value = "classId") String classId,
+                                              @Param(value = "searchKey") String searchKey,
+                                              Pageable pageable);
 
     @Query("select new com.demo.controllers.model.response.StudentResponse(student) from Student student where  student.classId=:classId  and  (:phone is null or student.phoneNumber = :phone) and (:email is null or student.email = :email) and( student.lastName like :searchKey or student.firstName like :searchKey)")
     Page<StudentResponse> getStudentPaging(
@@ -38,7 +49,6 @@ public interface StudentRepository extends JpaRepository<Student, String>, JpaSp
             @Param(value = "classId") String classId,
             @Param(value = "searchKey") String searchKey,
             Pageable pageable);
-
 
     List<Student> findAllByIdAndStatus(String id, AppStatus status);
 

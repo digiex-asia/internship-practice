@@ -44,8 +44,10 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Page<StudentResponse> getPageMember(String email, String phone, String classId, String searchKey, String sortField, boolean ascSort, int pageNumber, int pageSize) {
-        System.out.println(sortField);
+
         String properties = "";
+        System.out.println(sortField);
+        System.out.println(ascSort);
         switch (sortField) {
             case Constant.MEMBER_FIRST_NAME:
                 properties = "firstName";
@@ -67,10 +69,23 @@ public class StudentServiceImpl implements StudentService {
                 break;
         }
 
-        Sort.Direction direction = ascSort ? Sort.Direction.ASC : Sort.Direction.DESC;
-        Sort sort = Sort.by(direction, properties);
-        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
-        return studentRepository.getStudentPaging(email, phone, classId, "%" + searchKey + "%", pageable);
+        if (sortField.equals("avg_score") && !ascSort) {
+            System.out.println("vao");
+            Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
+            return studentRepository.getStudentPagingDesc(email, phone, classId, "%" + searchKey + "%", pageable);
+        } else if (sortField.equals("avg_score") && ascSort) {
+            System.out.println("vao ASC");
+            Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
+            return studentRepository.getStudentPagingAsc(email, phone, classId, "%" + searchKey + "%", pageable);
+        } else {
+
+            Sort.Direction direction = ascSort ? Sort.Direction.ASC : Sort.Direction.DESC;
+            Sort sort = Sort.by(direction, properties);
+
+            Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
+            return studentRepository.getStudentPaging(email, phone, classId, "%" + searchKey + "%", pageable);
+
+        }
     }
 
     @Override

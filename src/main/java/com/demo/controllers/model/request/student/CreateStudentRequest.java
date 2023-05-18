@@ -55,6 +55,7 @@ public class CreateStudentRequest {
     private String classId;
     @Size(max = 5, message = ParamError.MAX_VALUE)
     @Size(min = 3, message = ParamError.MIN_VALUE)
+    @NotNull(message = ParamError.FIELD_NAME)
     List<CreateSubjectRequest> subjects;
 
     public CreateStudentRequest(String email, String firstName, String lastName, Date dob, String phoneNumber, String gender) {

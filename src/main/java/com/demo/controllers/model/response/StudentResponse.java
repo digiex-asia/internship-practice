@@ -47,6 +47,19 @@ public class StudentResponse {
         this.classId = student.getClassId();
 
     }
+    public StudentResponse(Student student,Double avgScore) {
+        this.id = student.getId();
+        this.firstName = student.getFirstName();
+        this.lastName = student.getLastName();
+        this.email = student.getEmail();
+        this.bob = student.getBob();
+        this.address = student.getAddress();
+        this.gender = student.getGender();
+        this.phoneNumber = student.getPhoneNumber();
+        this.status = student.getStatus();
+        this.classId = student.getClassId();
+        this.avgScore=avgScore;
+    }
     public StudentResponse(Student student, List<Subject> subjects) {
         this.id = student.getId();
         this.firstName = student.getFirstName();

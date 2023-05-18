@@ -15,4 +15,6 @@ public interface SubjectService {
 
 
     void save(Subject subject);
+
+    List<Subject> findAllByListStudentId(List<String> ids);
 }

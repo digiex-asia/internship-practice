@@ -23,6 +23,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class FileServiceImpl implements FileService {
@@ -60,8 +62,6 @@ public class FileServiceImpl implements FileService {
                     !csvRecord.get("First Name").trim().isEmpty() && !csvRecord.get("Last Name").trim().isEmpty()
                     && !csvRecord.get("Dob").trim().isEmpty()
             ) {
-
-
                 Validator.validateEmail(csvRecord.get("Email"));
                 Validator.validatePhone(csvRecord.get("Phone Number"));
                 Validator.validateStringNull(csvRecord.get("First Name"));
@@ -114,8 +114,6 @@ public class FileServiceImpl implements FileService {
                     subject.setScore(Double.valueOf(csvRecord.get("Literature")));
                     subjects.add(subject);
                 }
-
-                System.out.println("pass");
                 studentService.save(student);
                 subjectService.saveAll(subjects);
                 students.add(new StudentResponse(student, subjects));
@@ -140,10 +138,15 @@ public class FileServiceImpl implements FileService {
         List<Student> students = studentService.findAll();
         List<FileStudentResponse> listStudent = new ArrayList<>();
         csvPrinter.printRecord("Email", "First Name", "Last name", "Dob", "Phone Number", "Gender", "Math", "Literature", "Medium Score");
+        List<String> ids = students.stream().map(Student::getId).collect(Collectors.toList());
+        List<Subject> subjects = subjectService.findAllByListStudentId(ids);
+
+
         students.forEach(e -> {
-            List<Subject> subjects = subjectService.findAllByStudentId(e.getId());
-            listStudent.add(new FileStudentResponse(e, subjects));
+            listStudent.add(new FileStudentResponse(e, subjects.stream().filter(subject -> subject.getStudentId().equals(e.getId())).collect(Collectors.toList())));
         });
+
+
         listStudent.forEach(e -> {
             SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = null;
@@ -177,14 +180,12 @@ public class FileServiceImpl implements FileService {
                     scoreLiterature,
                     scoreMedium
             );
-
             try {
                 csvPrinter.printRecord(data);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
         });
-
         csvPrinter.flush();
         return new ByteArrayInputStream(out.toByteArray());
     }
