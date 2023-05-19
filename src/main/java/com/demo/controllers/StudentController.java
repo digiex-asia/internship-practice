@@ -65,6 +65,9 @@ public class StudentController extends AbstractBaseController {
         Validator.isDateFormat(studentRequest.getBob());
         Validator.validatePhone(studentRequest.getPhoneNumber());
         Validator.validateEmail(studentRequest.getEmail());
+        if(studentRequest.getSubjects() == null || studentRequest.getSubjects().size() >5 || studentRequest.getSubjects().size() <3){
+            throw new ApplicationException(RestAPIStatus.EXISTED, "Subjects must be not null with size more 3 and size less 5");
+        }
         Set<String> checkDuplicate = new HashSet<>();
         for (CreateSubjectRequest subject : studentRequest.getSubjects()) {
             if (!checkDuplicate.add(subject.getName().toLowerCase())) {

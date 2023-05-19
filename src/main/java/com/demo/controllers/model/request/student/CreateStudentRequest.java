@@ -50,9 +50,7 @@ public class CreateStudentRequest {
     private String phoneNumber;
     @NotNull(message = ParamError.FIELD_NAME)
     private String classId;
-    @Size(max = 5, message = ParamError.MAX_VALUE)
-    @Size(min = 3, message = ParamError.MIN_VALUE)
-    @NotNull(message = ParamError.FIELD_NAME)
+
     List<CreateSubjectRequest> subjects;
 
 }
