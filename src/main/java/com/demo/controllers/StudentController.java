@@ -11,6 +11,7 @@ import com.demo.controllers.helper.SubjectHelper;
 import com.demo.controllers.model.request.student.CreateStudentRequest;
 import com.demo.controllers.model.request.student.UpdateStudentRequest;
 import com.demo.controllers.model.request.subject.CreateSubjectRequest;
+import com.demo.controllers.model.request.subject.UpdateSubjectRequest;
 import com.demo.controllers.model.response.PagingResponse;
 import com.demo.controllers.model.response.StudentResponse;
 import com.demo.entities.Class;
@@ -100,6 +101,7 @@ public class StudentController extends AbstractBaseController {
                 .contentType(MediaType.parseMediaType("application/csv"))
                 .body(file);
     }
+
     @PostMapping(path = "/import", consumes = {"multipart/form-data"})
     public ResponseEntity<Resource> uploadExcel(@RequestParam("file") MultipartFile file) throws IOException, ParseException {
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
@@ -113,6 +115,7 @@ public class StudentController extends AbstractBaseController {
                 .contentType(MediaType.parseMediaType("application/csv"))
                 .body(fileResponse);
     }
+
     @GetMapping(path = "/export")
     public ResponseEntity<Resource> exportExcel() throws IOException {
         String filename = "exportFile.csv";
@@ -123,6 +126,7 @@ public class StudentController extends AbstractBaseController {
                 .contentType(MediaType.parseMediaType("application/csv"))
                 .body(file);
     }
+
     @GetMapping(path = ApiPath.ID)
     public ResponseEntity<RestAPIResponse> getDetail(
             @PathVariable(name = "id") String id
@@ -131,6 +135,7 @@ public class StudentController extends AbstractBaseController {
         Validator.notNull(student, RestAPIStatus.NOT_FOUND, "User Not Found");
         return responseUtil.successResponse(new StudentResponse(student, subjectService.findAllByStudentId(student.getId())));
     }
+
     @GetMapping(path = ApiPath.PAGE_STUDENT_BY_CLASS)
     public ResponseEntity<RestAPIResponse> getPages(
             @RequestParam(name = "id") String classId,
@@ -155,6 +160,7 @@ public class StudentController extends AbstractBaseController {
         Page<StudentResponse> userResponses = studentService.getPageMember(email, phone, classId, searchKey, sortField, ascSort, pageNumber, pageSize);
         return responseUtil.successResponse(new PagingResponse(userResponses));
     }
+
     @GetMapping(path = ApiPath.STUDENT_BY_CLASS)
     public ResponseEntity<RestAPIResponse> getListStudentByClassId(
             @RequestParam(name = "id") String id
@@ -173,6 +179,7 @@ public class StudentController extends AbstractBaseController {
         listStudentByClassId.sort(Comparator.comparing(StudentResponse::getAvgScore, Comparator.reverseOrder()));
         return responseUtil.successResponse(listStudentByClassId);
     }
+
     @GetMapping(path = ApiPath.STUDENT_TOP_3_API)
     public ResponseEntity<RestAPIResponse> getTop3Average(
             @RequestParam("type") TypeRank type
@@ -187,23 +194,35 @@ public class StudentController extends AbstractBaseController {
             @PathVariable(name = "id") String id,
             @Valid @RequestBody UpdateStudentRequest studentRequest
     ) {
-        Validator.validatePhone(studentRequest.getPhoneNumber());
+        if (studentRequest.getPhoneNumber() != null) {
+            Validator.validatePhone(studentRequest.getPhoneNumber());
+        }
         if (studentRequest.getEmail() != null) {
             Validator.validateEmail(studentRequest.getEmail());
-
         }
         Student student = studentService.findById(id);
         Validator.notNull(student, RestAPIStatus.NOT_FOUND, "Student not found");
         Student studentSave = studentHelper.updateStudent(student, studentRequest);
         List<Subject> subjects = subjectService.findAllByStudentId(student.getId());
-        System.out.println(studentRequest.getSubjects());
+        System.out.println(subjects);
         if (studentRequest.getSubjects() != null) {
+            Set<String> checkDuplicate = new HashSet<>();
+            for (UpdateSubjectRequest subject : studentRequest.getSubjects()) {
+                if (!checkDuplicate.add(subject.getName().toLowerCase())) {
+                    throw new ApplicationException(RestAPIStatus.EXISTED, "Subject existed with student");
+                }
+                Subject checkSubject = subjects.stream().filter(sub -> sub.getName().trim().equalsIgnoreCase(subject.getName().trim())).findFirst().orElse(null);
+                if (checkSubject != null) {
+                    throw new ApplicationException(RestAPIStatus.EXISTED, "Subject existed with student");
+                }
+            }
+
             studentRequest.getSubjects().forEach(e -> {
-                if(e.getId()!=null){
+                if (e.getId() != null) {
                     Subject subject = subjects.stream().filter(sub -> sub.getId().equals(e.getId())).findFirst()
                             .orElseThrow(() -> new ApplicationException(RestAPIStatus.BAD_REQUEST, "Subject not found"));
-                        subjectHelper.updateSubject(e, subject);
-                }else{
+                    subjectHelper.updateSubject(e, subject);
+                } else {
                     subjects.add(subjectHelper.createSubjectIfNull(e, studentSave.getId()));
                 }
             });
