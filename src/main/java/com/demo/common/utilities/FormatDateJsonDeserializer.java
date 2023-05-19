@@ -16,7 +16,6 @@ import java.util.Date;
 public class FormatDateJsonDeserializer extends JsonDeserializer<Date> {
     @Override
     public Date deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JacksonException {
-
         SimpleDateFormat format = new SimpleDateFormat(Constant.API_FORMAT_DATE);
         String date = jsonParser.getText();
         try {

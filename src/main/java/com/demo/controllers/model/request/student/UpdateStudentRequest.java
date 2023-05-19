@@ -30,23 +30,13 @@ import java.util.List;
 @JsonNaming(PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UpdateStudentRequest {
-
     private String firstName;
-
-
     private String lastName;
-
     private String email;
-
     private Date bob;
-
     private String address;
-
     private Gender gender;
-
     private String phoneNumber;
-
     private String classId;
-
     List<UpdateSubjectRequest> subjects;
 }

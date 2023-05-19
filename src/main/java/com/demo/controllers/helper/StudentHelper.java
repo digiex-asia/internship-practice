@@ -18,8 +18,6 @@ import java.util.List;
 @Component
 public class StudentHelper {
     public Student createStudent(CreateStudentRequest studentRequest) {
-
-
         Student student = new Student();
         student.setId(UniqueID.getUUID());
         student.setStatus(AppStatus.ACTIVE);
@@ -31,11 +29,8 @@ public class StudentHelper {
         student.setGender(studentRequest.getGender());
         student.setClassId(studentRequest.getClassId());
         student.setPhoneNumber(studentRequest.getPhoneNumber());
-
-
         return student;
     }
-
     public Student updateStudent(Student student, UpdateStudentRequest studentRequest) {
         if (studentRequest.getFirstName() != null && !studentRequest.getFirstName().trim().isEmpty()) {
             student.setFirstName(studentRequest.getFirstName().trim());
@@ -67,7 +62,6 @@ public class StudentHelper {
             student.setPhoneNumber(studentRequest.getPhoneNumber());
 
         }
-
         return student;
     }
 

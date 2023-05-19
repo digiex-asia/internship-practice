@@ -72,8 +72,6 @@ public class StudentController extends AbstractBaseController {
         }
         Student studentByEmail = studentService.getByEmail(studentRequest.getEmail());
         Validator.mustNull(studentByEmail, RestAPIStatus.EXISTED, "Student existed");
-
-
         Student studentByPhone = studentService.getByPhoneNumber(studentRequest.getPhoneNumber());
         Validator.mustNull(studentByPhone, RestAPIStatus.EXISTED, "Student existed");
 
@@ -101,8 +99,6 @@ public class StudentController extends AbstractBaseController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
                 .contentType(MediaType.parseMediaType("application/csv"))
                 .body(file);
-
-
     }
     @PostMapping(path = "/import", consumes = {"multipart/form-data"})
     public ResponseEntity<Resource> uploadExcel(@RequestParam("file") MultipartFile file) throws IOException, ParseException {
@@ -110,28 +106,22 @@ public class StudentController extends AbstractBaseController {
         if (!Objects.equals(extension, "csv")) {
             throw new ApplicationException(RestAPIStatus.BAD_PARAMS, "File import must be csv");
         }
-
         String filename = "fileResponse.csv";
         InputStreamResource fileResponse = new InputStreamResource(fileService.readFile(file));
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
                 .contentType(MediaType.parseMediaType("application/csv"))
                 .body(fileResponse);
-
-
     }
     @GetMapping(path = "/export")
     public ResponseEntity<Resource> exportExcel() throws IOException {
         String filename = "exportFile.csv";
 
         InputStreamResource file = new InputStreamResource(fileService.exportExcelAllStudent());
-
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
                 .contentType(MediaType.parseMediaType("application/csv"))
                 .body(file);
-
-
     }
     @GetMapping(path = ApiPath.ID)
     public ResponseEntity<RestAPIResponse> getDetail(

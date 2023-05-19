@@ -41,9 +41,7 @@ public class CreateStudentRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constant.API_FORMAT_DATE)
     @JsonDeserialize(using = FormatDateJsonDeserializer.class)
     private Date bob;
-
     private String address;
-
     @NotNull(message = ParamError.FIELD_NAME)
     private Gender gender;
     @Size(max = 12, message = ParamError.MAX_VALUE)
@@ -51,7 +49,6 @@ public class CreateStudentRequest {
     @NotBlank(message = ParamError.FIELD_NAME)
     private String phoneNumber;
     @NotNull(message = ParamError.FIELD_NAME)
-
     private String classId;
     @Size(max = 5, message = ParamError.MAX_VALUE)
     @Size(min = 3, message = ParamError.MIN_VALUE)

@@ -140,12 +140,9 @@ public class FileServiceImpl implements FileService {
         csvPrinter.printRecord("Email", "First Name", "Last name", "Dob", "Phone Number", "Gender", "Math", "Literature", "Medium Score");
         List<String> ids = students.stream().map(Student::getId).collect(Collectors.toList());
         List<Subject> subjects = subjectService.findAllByListStudentId(ids);
-
-
         students.forEach(e -> {
             listStudent.add(new FileStudentResponse(e, subjects.stream().filter(subject -> subject.getStudentId().equals(e.getId())).collect(Collectors.toList())));
         });
-
 
         listStudent.forEach(e -> {
             SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
