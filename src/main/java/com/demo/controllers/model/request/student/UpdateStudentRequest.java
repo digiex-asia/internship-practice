@@ -30,34 +30,23 @@ import java.util.List;
 @JsonNaming(PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UpdateStudentRequest {
-    @Size(max = 45, message = ParamError.MAX_LENGTH)
-    @NotBlank(message = ParamError.FIELD_NAME)
+
     private String firstName;
-    @Size(max = 45, message = ParamError.MAX_LENGTH)
-    @NotBlank(message = ParamError.FIELD_NAME)
+
 
     private String lastName;
-    @Size(max = 250, message = ParamError.MAX_LENGTH)
-    @NotBlank(message = ParamError.FIELD_NAME)
 
     private String email;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constant.API_FORMAT_DATE)
-    @JsonDeserialize(using = FormatDateJsonDeserializer.class)
     private Date bob;
-
 
     private String address;
 
-    private String gender;
-    @Size(max = 12, message = ParamError.MAX_VALUE)
-    @Size(min = 8, message = ParamError.MIN_VALUE)
-    @NotBlank(message = ParamError.FIELD_NAME)
+    private Gender gender;
+
     private String phoneNumber;
-    @NotNull(message = ParamError.FIELD_NAME)
 
     private String classId;
-    @Size(max = 5, message = ParamError.MAX_VALUE)
-    @Size(min = 3, message = ParamError.MIN_VALUE)
+
     List<UpdateSubjectRequest> subjects;
 }

@@ -1,6 +1,8 @@
 package com.demo.controllers.helper;
 
 import com.demo.common.enums.AppStatus;
+import com.demo.common.exceptions.ApplicationException;
+import com.demo.common.utilities.RestAPIStatus;
 import com.demo.common.utilities.UniqueID;
 import com.demo.controllers.model.request.subject.CreateSubjectRequest;
 import com.demo.controllers.model.request.subject.UpdateSubjectRequest;
@@ -23,7 +25,7 @@ public class SubjectHelper {
         return subject;
     }
 
-    public Subject updateSubject(UpdateSubjectRequest subjectRequest, String studentId, Subject subject) {
+    public Subject updateSubject(UpdateSubjectRequest subjectRequest, Subject subject) {
         if (subjectRequest.getId() != null && !subjectRequest.getId().trim().isEmpty()) {
             subject.setId(subjectRequest.getId());
 
@@ -40,15 +42,18 @@ public class SubjectHelper {
             subject.setNumberOfLessons(subjectRequest.getNumberOfLessons());
 
         }
-        if (subjectRequest.getStudentId() != null && !subjectRequest.getStudentId().trim().isEmpty()) {
 
-            subject.setStudentId(studentId);
-        }
         return subject;
     }
 
     public Subject createSubjectIfNull(UpdateSubjectRequest subjectRequest, String studentId) {
-
+        System.out.println(subjectRequest.getScore());
+        if (subjectRequest.getScore() == null || subjectRequest.getScore() > 10 || subjectRequest.getScore() < 0) {
+            throw new ApplicationException(RestAPIStatus.BAD_REQUEST, "Score must be not null and max is 10, min is 0");
+        }
+        if (subjectRequest.getName() == null || subjectRequest.getName().length() > 45) {
+            throw new ApplicationException(RestAPIStatus.BAD_REQUEST, "Name must be not null and length less 45");
+        }
         Subject subject = new Subject();
         subject.setId(UniqueID.getUUID());
         subject.setStatus(AppStatus.ACTIVE);

@@ -152,7 +152,8 @@ public class Validator {
 
     public static void isDateFormat(Date bob) {
 
-        if (Objects.equals(bob, "1111-11-11")) {
+        if (Objects.equals(bob.toString(), "1111-11-11")) {
+            System.out.println("29323");
             throw new ApplicationException(RestAPIStatus.BAD_REQUEST, "Date format must be MM/dd/yy");
         }
     }

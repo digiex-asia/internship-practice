@@ -1,6 +1,7 @@
 package com.demo.services;
 
 import com.demo.common.enums.AppStatus;
+import com.demo.common.enums.TypeRank;
 import com.demo.common.exceptions.ApplicationException;
 import com.demo.common.utilities.Constant;
 import com.demo.common.utilities.RestAPIStatus;
@@ -99,47 +100,44 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<StudentResponse> getTop3StudentByType(String type) {
+    public List<StudentResponse> getTop3StudentByType(TypeRank type) {
         List<Student> students = this.findAllByStatus(AppStatus.ACTIVE);
         List<StudentResponse> listStudentResponse = new ArrayList<>();
+        List<String> ids = students.stream().map(Student::getId).collect(Collectors.toList());
+        List<Subject> subjectsByStudentId = subjectService.findAllByListStudentId(ids);
         students.forEach(e -> {
-            List<Subject> subjects = subjectService.findAllByStudentId(e.getId());
-            Double totalScore = subjects.stream().mapToDouble(Subject::getScore).sum();
-            Double avgScore = totalScore / subjects.size();
-            if (Double.isNaN(avgScore)) {
-                avgScore = 0.0;
-            }
-            listStudentResponse.add(new StudentResponse(e, subjects, avgScore));
+            List<Subject> subjects = subjectsByStudentId.stream().filter(i -> i.getStudentId().equals(e.getId())).collect(Collectors.toList());
+            Double totalScore = subjects.stream().mapToDouble(Subject::getScore).sum() / subjects.size();
+            listStudentResponse.add(new StudentResponse(e, subjects, totalScore));
         });
-        List<StudentResponse> listStudent = null;
+        List<StudentResponse> listStudent = new ArrayList<>();
         switch (type) {
-            case Constant.EXCELLENT_STUDENT_TOP_3:
+            case EXCELLENT:
                 listStudent = listStudentResponse.stream()
                         .filter(e -> e.getAvgScore() > 8.5 && e.getAvgScore() <= 10)
                         .collect(Collectors.toList());
                 break;
-            case Constant.GOOD_STUDENT_TOP_3:
+            case GOOD:
                 listStudent = listStudentResponse.stream()
                         .filter(e -> e.getAvgScore() > 6.5 && e.getAvgScore() <= 8.4)
                         .collect(Collectors.toList());
                 break;
-            case Constant.AVERAGE_STUDENT_TOP_3:
+            case AVERAGE:
                 listStudent = listStudentResponse.stream()
                         .filter(e -> e.getAvgScore() > 5.0 && e.getAvgScore() <= 6.4)
                         .collect(Collectors.toList());
                 break;
-            case Constant.WEAK_STUDENT_TOP_3:
+            case WEAK:
                 listStudent = listStudentResponse.stream()
                         .filter(e -> e.getAvgScore() > 2.5 && e.getAvgScore() <= 4.9)
                         .collect(Collectors.toList());
                 break;
-            case Constant.POOR_STUDENT_TOP_3:
+            case POOR:
                 listStudent = listStudentResponse.stream()
                         .filter(e -> e.getAvgScore() <= 2.5)
                         .collect(Collectors.toList());
                 break;
-            default:
-                throw new ApplicationException(RestAPIStatus.BAD_REQUEST, "Invalid name type");
+
         }
         return listStudent;
 

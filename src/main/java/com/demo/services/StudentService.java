@@ -1,6 +1,7 @@
 package com.demo.services;
 
 import com.demo.common.enums.AppStatus;
+import com.demo.common.enums.TypeRank;
 import com.demo.controllers.model.response.StudentResponse;
 import com.demo.entities.Student;
 import org.springframework.data.domain.Page;
@@ -25,7 +26,7 @@ public interface StudentService {
 
     List<Student> findAllByStatus(AppStatus active);
 
-    List<StudentResponse> getTop3StudentByType(String type);
+    List<StudentResponse> getTop3StudentByType(TypeRank type);
 
     List<Student> findAll();
 }

@@ -19,11 +19,9 @@ import javax.validation.constraints.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UpdateClassRequest {
 
-    @Size(max = 64, message = ParamError.MAX_LENGTH)
-    @NotBlank(message = ParamError.FIELD_NAME)
+
     private String name;
-    @Max(value = 20, message = ParamError.MAX_VALUE)
-    @Min(value = 1, message = ParamError.MIN_VALUE)
+
     private Integer max_student;
 
 }

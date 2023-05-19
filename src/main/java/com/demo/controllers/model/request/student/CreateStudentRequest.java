@@ -43,9 +43,9 @@ public class CreateStudentRequest {
     private Date bob;
 
     private String address;
-    @Size(max = 250, message = ParamError.MAX_LENGTH)
-    @NotBlank(message = ParamError.FIELD_NAME)
-    private String gender;
+
+    @NotNull(message = ParamError.FIELD_NAME)
+    private Gender gender;
     @Size(max = 12, message = ParamError.MAX_VALUE)
     @Size(min = 8, message = ParamError.MIN_VALUE)
     @NotBlank(message = ParamError.FIELD_NAME)
@@ -58,13 +58,4 @@ public class CreateStudentRequest {
     @NotNull(message = ParamError.FIELD_NAME)
     List<CreateSubjectRequest> subjects;
 
-    public CreateStudentRequest(String email, String firstName, String lastName, Date dob, String phoneNumber, String gender) {
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.bob = dob;
-        this.phoneNumber = phoneNumber;
-        this.gender = gender;
-
-    }
 }

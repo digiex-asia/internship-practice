@@ -28,7 +28,7 @@ public class StudentHelper {
         student.setEmail(studentRequest.getEmail().trim());
         student.setAddress(studentRequest.getAddress());
         student.setBob(studentRequest.getBob());
-        student.setGender(Gender.valueOf(studentRequest.getGender()));
+        student.setGender(studentRequest.getGender());
         student.setClassId(studentRequest.getClassId());
         student.setPhoneNumber(studentRequest.getPhoneNumber());
 
@@ -56,7 +56,7 @@ public class StudentHelper {
 
         }
         if (studentRequest.getGender() != null) {
-            student.setGender(Gender.valueOf(studentRequest.getGender()));
+            student.setGender(studentRequest.getGender());
 
         }
         if (studentRequest.getClassId() != null && !studentRequest.getClassId().trim().isEmpty()) {
