@@ -13,6 +13,7 @@ import com.demo.entities.Student;
 import java.util.List;
 import java.util.Optional;
 
+import com.demo.services.StudentService;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -34,7 +35,7 @@ public class StudentHelper {
     return student;
   }
 
-  public Student updateStudent(Student student, UpdateStudentRequest studentRequest) {
+  public Student updateStudent(Student student, UpdateStudentRequest studentRequest, StudentService studentService) {
 
     if (studentRequest.getFirstName() != null && !studentRequest.getFirstName().trim().isEmpty()) {
       student.setFirstName(studentRequest.getFirstName().trim());
@@ -42,8 +43,12 @@ public class StudentHelper {
     if (studentRequest.getLastName() != null && !studentRequest.getLastName().trim().isEmpty()) {
       student.setFirstName(studentRequest.getLastName());
     }
-    if (studentRequest.getEmail() != null && !studentRequest.getEmail().trim().isEmpty()) {
+    if (studentRequest.getEmail() != null && !studentRequest.getEmail().trim().isEmpty() &&
+            !studentRequest.getEmail().trim().equals(student.getEmail())) {
       Validator.validateEmail(studentRequest.getEmail().trim());
+      Student studentByEmail = studentService.getByEmail(studentRequest.getEmail().trim());
+      Validator.mustNull(studentByEmail, RestAPIStatus.EXISTED, "Student existed");
+
       student.setEmail(studentRequest.getEmail().trim());
     }
     if (studentRequest.getAddress() != null && !studentRequest.getAddress().trim().isEmpty()) {
@@ -56,9 +61,13 @@ public class StudentHelper {
       student.setGender(studentRequest.getGender());
     }
 
-    if (studentRequest.getPhoneNumber() != null
-        && !studentRequest.getPhoneNumber().trim().isEmpty()) {
+    if (studentRequest.getPhoneNumber() != null && !studentRequest.getPhoneNumber().trim().isEmpty() &&
+            !studentRequest.getPhoneNumber().trim().equals(student.getPhoneNumber())) {
       Validator.validatePhone(studentRequest.getPhoneNumber().trim());
+
+      Student studentByPhone =
+              studentService.getByPhoneNumber(studentRequest.getPhoneNumber().trim());
+      Validator.mustNull(studentByPhone, RestAPIStatus.EXISTED, "Student existed");
       student.setPhoneNumber(studentRequest.getPhoneNumber().trim());
     }
     return student;
