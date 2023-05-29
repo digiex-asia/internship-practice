@@ -14,8 +14,10 @@ public class Subject extends BaseEntity implements Serializable {
     @Id
     @Column(nullable = false, updatable = false, length = 32)
     private String id;
+
     @Column(name = "name", length = 45)
     private String name;
+
     @Column(name = "score", nullable = false, length = 45)
     private Double score;
 

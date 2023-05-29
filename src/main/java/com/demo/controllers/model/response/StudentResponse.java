@@ -6,6 +6,7 @@ import com.demo.common.utilities.Constant;
 import com.demo.entities.Student;
 import com.demo.entities.Subject;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,13 +19,13 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class StudentResponse {
     private String id;
     private String firstName;
     private String lastName;
     private String email;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constant.API_FORMAT_DATE)
-    private Date bob;
+    private long bob;
     private String address;
     private Gender gender;
     private String phoneNumber;
@@ -47,7 +48,7 @@ public class StudentResponse {
         this.classId = student.getClassId();
 
     }
-    public StudentResponse(Student student,Double avgScore) {
+    public StudentResponse(Student student,double avgScore) {
         this.id = student.getId();
         this.firstName = student.getFirstName();
         this.lastName = student.getLastName();

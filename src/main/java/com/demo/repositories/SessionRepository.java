@@ -15,8 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface SessionRepository extends JpaRepository<Session, String> {
 
-
-    @Modifying
-    @Query(value = "DELETE FROM Session WHERE userId = :userId")
-    void deleteSessionsByUserId(@Param(value = "userId") String userId);
+  @Modifying
+  @Query(value = "DELETE FROM Session WHERE userId = :userId")
+  void deleteSessionsByUserId(@Param(value = "userId") String userId);
 }

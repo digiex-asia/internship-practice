@@ -12,24 +12,24 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-
 /**
  * @author DiGiEx Group
  */
 @Repository
 @Transactional
-public interface UserRepository extends JpaRepository<User, String>, JpaSpecificationExecutor<User> {
+public interface UserRepository
+    extends JpaRepository<User, String>, JpaSpecificationExecutor<User> {
 
+  User findByIdAndStatusIsNot(String id, AppStatus status);
 
-    User findByIdAndStatusIsNot(String id, AppStatus status);
+  User findByEmailAndStatus(String email, AppStatus status);
 
-    User findByEmailAndStatus(String email, AppStatus status);
+  User findByIdAndStatusNot(String id, AppStatus appStatus);
 
-    User findByIdAndStatusNot(String id, AppStatus appStatus);
-
-    @Query("select new com.demo.controllers.model.response.UserResponse(user) from User user where user.status <> :status and (user.firstName like :searchKey or  user.lastName like :searchKey)")
-    Page<UserResponse> getUserPaging(@Param(value = "status") AppStatus status,
-                                     @Param(value = "searchKey") String searchKey,
-                                     Pageable pageable);
-
+  @Query(
+      "select new com.demo.controllers.model.response.UserResponse(user) from User user where user.status <> :status and (user.firstName like :searchKey or  user.lastName like :searchKey)")
+  Page<UserResponse> getUserPaging(
+      @Param(value = "status") AppStatus status,
+      @Param(value = "searchKey") String searchKey,
+      Pageable pageable);
 }

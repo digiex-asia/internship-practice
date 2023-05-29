@@ -1,89 +1,67 @@
 package com.demo.controllers.helper;
 
 import com.demo.common.enums.AppStatus;
-import com.demo.common.enums.Gender;
+import com.demo.common.exceptions.ApplicationException;
+import com.demo.common.utilities.RestAPIStatus;
 import com.demo.common.utilities.UniqueID;
-import com.demo.controllers.model.request.class_.CreateClassRequest;
-import com.demo.controllers.model.request.student.CreateStudentRequest;
-import com.demo.controllers.model.request.student.UpdateStudentRequest;
+import com.demo.common.utilities.Validator;
+import com.demo.controllers.model.request.CreateStudentRequest;
+import com.demo.controllers.model.request.UpdateStudentRequest;
+import com.demo.controllers.model.request.UpdateSubjectRequest;
 import com.demo.controllers.model.response.StudentResponse;
-import com.demo.entities.Class;
 import com.demo.entities.Student;
-import org.springframework.stereotype.Component;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Component;
 
 @Component
 public class StudentHelper {
-    public Student createStudent(CreateStudentRequest studentRequest) {
-        Student student = new Student();
-        student.setId(UniqueID.getUUID());
-        student.setStatus(AppStatus.ACTIVE);
-        student.setFirstName(studentRequest.getFirstName().trim());
-        student.setLastName(studentRequest.getLastName().trim());
-        student.setEmail(studentRequest.getEmail().trim());
-        student.setAddress(studentRequest.getAddress());
-        student.setBob(studentRequest.getBob());
-        student.setGender(studentRequest.getGender());
-        student.setClassId(studentRequest.getClassId());
-        student.setPhoneNumber(studentRequest.getPhoneNumber());
-        return student;
+  public Student createStudent(CreateStudentRequest studentRequest) {
+    Student student = new Student();
+    student.setId(UniqueID.getUUID());
+    student.setStatus(AppStatus.ACTIVE);
+    student.setFirstName(studentRequest.getFirstName().trim());
+    student.setLastName(studentRequest.getLastName().trim());
+    student.setEmail(studentRequest.getEmail().trim());
+    if (studentRequest.getAddress() != null) {
+      student.setAddress(studentRequest.getAddress().trim());
     }
-    public Student updateStudent(Student student, UpdateStudentRequest studentRequest) {
-        if (studentRequest.getFirstName() != null && !studentRequest.getFirstName().trim().isEmpty()) {
-            student.setFirstName(studentRequest.getFirstName().trim());
-        }
-        if (studentRequest.getLastName() != null && !studentRequest.getLastName().trim().isEmpty()) {
-            student.setFirstName(studentRequest.getLastName());
-        }
-        if (studentRequest.getEmail() != null && !studentRequest.getEmail().trim().isEmpty()) {
-            student.setEmail(studentRequest.getEmail());
+    student.setBob(studentRequest.getBob());
+    student.setGender(studentRequest.getGender());
+    student.setClassId(studentRequest.getClassId().trim());
+    student.setPhoneNumber(studentRequest.getPhoneNumber().trim());
+    return student;
+  }
 
-        }
-        if (studentRequest.getAddress() != null && !studentRequest.getAddress().trim().isEmpty()) {
-            student.setAddress(studentRequest.getAddress());
+  public Student updateStudent(Student student, UpdateStudentRequest studentRequest) {
 
-        }
-        if (studentRequest.getBob() != null) {
-            student.setBob(studentRequest.getBob());
-
-        }
-        if (studentRequest.getGender() != null) {
-            student.setGender(studentRequest.getGender());
-
-        }
-        if (studentRequest.getClassId() != null && !studentRequest.getClassId().trim().isEmpty()) {
-            student.setClassId(studentRequest.getClassId());
-
-        }
-        if (studentRequest.getPhoneNumber() != null && !studentRequest.getPhoneNumber().trim().isEmpty()) {
-            student.setPhoneNumber(studentRequest.getPhoneNumber());
-
-        }
-        return student;
+    if (studentRequest.getFirstName() != null && !studentRequest.getFirstName().trim().isEmpty()) {
+      student.setFirstName(studentRequest.getFirstName().trim());
+    }
+    if (studentRequest.getLastName() != null && !studentRequest.getLastName().trim().isEmpty()) {
+      student.setFirstName(studentRequest.getLastName());
+    }
+    if (studentRequest.getEmail() != null && !studentRequest.getEmail().trim().isEmpty()) {
+      Validator.validateEmail(studentRequest.getEmail().trim());
+      student.setEmail(studentRequest.getEmail().trim());
+    }
+    if (studentRequest.getAddress() != null && !studentRequest.getAddress().trim().isEmpty()) {
+      student.setAddress(studentRequest.getAddress());
+    }
+    if (studentRequest.getBob() != null) {
+      student.setBob(studentRequest.getBob());
+    }
+    if (studentRequest.getGender() != null) {
+      student.setGender(studentRequest.getGender());
     }
 
-    public List<StudentResponse> sortList(List<StudentResponse> listStudent) {
-        listStudent.sort((p1, p2) -> {
-            if (p1.getAvgScore() > p2.getAvgScore()) {
-                return -1;
-            }
-            if (p1.getAvgScore() < p2.getAvgScore()) {
-                return 1;
-            }
-            if (p1.getBob().compareTo(p2.getBob()) < 0) {
-                return -1;
-            }
-            if (p1.getBob().compareTo(p2.getBob()) > 0) {
-                return 1;
-            }
-            return -p1.getAvgScore().compareTo(p2.getAvgScore());
-        });
-        if (listStudent.size() >= 3) {
-            return listStudent.subList(0, 3);
-        }
-        return listStudent;
+    if (studentRequest.getPhoneNumber() != null
+        && !studentRequest.getPhoneNumber().trim().isEmpty()) {
+      Validator.validatePhone(studentRequest.getPhoneNumber().trim());
+      student.setPhoneNumber(studentRequest.getPhoneNumber().trim());
     }
+    return student;
+  }
+
 }

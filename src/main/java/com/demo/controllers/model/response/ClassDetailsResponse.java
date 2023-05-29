@@ -19,22 +19,18 @@ import java.util.List;
 @NoArgsConstructor
 public class ClassDetailsResponse {
     private String id;
-
     private String name;
-
     private Integer maxStudent;
-
-
     private AppStatus status;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constant.API_FORMAT_DATE_TIME)
     private Date createdDate;
     private List<Student> students;
 
-    public ClassDetailsResponse(String id, String name, Integer maxStudent, AppStatus status, List<Student> students) {
-        this.id = id;
-        this.name = name;
-        this.maxStudent = maxStudent;
-        this.status = status;
+    public ClassDetailsResponse(Class c, List<Student> students) {
+        this.id = c.getId();
+        this.name = c.getName();
+        this.maxStudent = c.getMaxStudent();
+        this.status = c.getStatus();
         this.students = students;
     }
 

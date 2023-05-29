@@ -1,16 +1,20 @@
 package com.demo.services;
 
+import com.demo.common.enums.AppStatus;
 import com.demo.entities.Subject;
 import com.demo.repositories.SubjectRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class SubjectServiceImpl implements SubjectService {
-    @Autowired
-    SubjectRepository subjectRepository;
+
+    private final SubjectRepository subjectRepository;
+
+    public SubjectServiceImpl(SubjectRepository subjectRepository) {
+        this.subjectRepository = subjectRepository;
+    }
 
     @Override
     public void saveAll(List<Subject> subjects) {
@@ -38,8 +42,13 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public List<Subject> findAllByListStudentId(List<String> ids) {
-        return subjectRepository.findAllByStudentIdIn(ids);
+    public List<Subject> getAllByStudentIdIn(List<String> ids) {
+        return subjectRepository.findAllByStudentIdInAndStatus(ids, AppStatus.ACTIVE);
+    }
+
+    @Override
+    public List<Subject> getAllByIdIn(List<String> ids) {
+        return subjectRepository.findAllByIdInAndStatus(ids, AppStatus.ACTIVE);
     }
 
 

@@ -7,6 +7,7 @@ import com.demo.entities.Class;
 import com.demo.entities.Student;
 import com.demo.entities.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,32 +20,30 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ClassResponse {
     private String id;
-
     private String name;
-
     private Integer maxStudent;
-
     private AppStatus status;
     private Integer countStudent;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constant.API_FORMAT_DATE_TIME)
-    private Date createdDate;
+    private Long createdDate;
 
-    public ClassResponse(Class class_) {
-        this.id = class_.getId();
-        this.name = class_.getName();
-        this.status = class_.getStatus();
-        this.maxStudent = class_.getMaxStudent();
-        this.createdDate = class_.getCreatedDate();
+    List<Student> students;
+
+    public ClassResponse(Class c) {
+        this.id = c.getId();
+        this.name = c.getName();
+        this.status = c.getStatus();
+        this.maxStudent = c.getMaxStudent();
+        this.createdDate = c.getCreatedDate();
     }
-
-    public ClassResponse(Class class_, List<Student> students) {
-        this.id = class_.getId();
-        this.name = class_.getName();
-        this.status = class_.getStatus();
-        this.maxStudent = class_.getMaxStudent();
-        this.createdDate = class_.getCreatedDate();
+    public ClassResponse(Class c, List<Student> students) {
+        this.id = c.getId();
+        this.name = c.getName();
+        this.status = c.getStatus();
+        this.maxStudent = c.getMaxStudent();
+        this.createdDate = c.getCreatedDate();
         this.countStudent = students.size();
     }
 

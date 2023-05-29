@@ -1,7 +1,6 @@
-package com.demo.controllers.model.request.class_;
+package com.demo.controllers.model.request;
 
-import com.demo.common.enums.AppStatus;
-import com.demo.common.utilities.ParamError;
+import com.demo.common.enums.Gender;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -9,19 +8,21 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.validation.constraints.*;
+import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UpdateClassRequest {
-
-
-    private String name;
-
-    private Integer max_student;
-
+public class UpdateStudentRequest {
+    private String firstName;
+    private String lastName;
+    private String email;
+    private Long bob;
+    private String address;
+    private Gender gender;
+    private String phoneNumber;
+    List<UpdateSubjectRequest> subjects;
 }

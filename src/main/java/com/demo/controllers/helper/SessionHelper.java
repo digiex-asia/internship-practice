@@ -26,7 +26,7 @@ public class SessionHelper {
         session.setId(UniqueID.getUUID());
         String userId = user.getId();
         session.setUserId(userId);
-        session.setCreatedDate(DateUtil.convertToUTC(new Date()));
+        session.setCreatedDate(DateUtil.convertToUTC(new Date()).getTime());
         if(keepLogin){
             try {
                 session.setExpiryDate(sdf.parse("12/31/9999 00:00:00"));

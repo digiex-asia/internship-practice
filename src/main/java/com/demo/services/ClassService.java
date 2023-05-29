@@ -11,17 +11,15 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ClassService {
-    Class save(Class class_);
+    Class save(Class clazz);
 
     Class getByName(String name);
 
-    Class getById(String id);
-
     Page<ClassResponse> getPageMember(String searchKey, String sortField, boolean ascSort, int pageNumber, int pageSize);
 
-    List<Class> findAllByStatus(AppStatus status);
+    List<ClassResponse> getAllClass();
 
     Class getByIdAndStatus(String id, AppStatus active);
 
-    Class findById(String id);
+    Class getById(String id);
 }

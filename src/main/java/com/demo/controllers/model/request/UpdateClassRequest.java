@@ -1,4 +1,4 @@
-package com.demo.controllers.model.request.subject;
+package com.demo.controllers.model.request;
 
 import com.demo.common.enums.AppStatus;
 import com.demo.common.utilities.ParamError;
@@ -10,25 +10,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UpdateSubjectRequest {
+public class UpdateClassRequest {
 
-    private String id;
-
+    @Size(max = 64, message = ParamError.MAX_LENGTH)
     private String name;
 
-    private Double score;
-
-
-    private Integer numberOfLessons;
-
+    @Min(value = 1, message = ParamError.MIN_VALUE)
+    @Max(value = 20, message = ParamError.MAX_VALUE)
+    private Integer maxStudent;
 
 }

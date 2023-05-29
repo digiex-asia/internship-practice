@@ -2,7 +2,7 @@ package com.demo.controllers.helper;
 
 import com.demo.common.enums.AppStatus;
 import com.demo.common.utilities.UniqueID;
-import com.demo.controllers.model.request.class_.CreateClassRequest;
+import com.demo.controllers.model.request.CreateClassRequest;
 import com.demo.entities.Class;
 import org.springframework.stereotype.Component;
 
@@ -10,12 +10,12 @@ import org.springframework.stereotype.Component;
 public class ClassHelper {
     public Class createClass(CreateClassRequest classRequest) {
 
-        Class class_ = new Class();
-        class_.setId(UniqueID.getUUID());
-        class_.setStatus(AppStatus.ACTIVE);
-        class_.setName(classRequest.getName().trim());
-        class_.setMaxStudent(classRequest.getMax_student());
+        Class newClass = new Class();
+        newClass.setId(UniqueID.getUUID());
+        newClass.setStatus(AppStatus.ACTIVE);
+        newClass.setName(classRequest.getName().trim());
+        newClass.setMaxStudent(classRequest.getMaxStudent());
 
-        return class_;
+        return newClass;
     }
 }

@@ -32,25 +32,21 @@ import java.util.Date;
 public abstract class BaseEntity implements Serializable {
 
     @CreatedDate
-    @Column(name = "created_date", columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constant.API_FORMAT_DATE_TIME)
-    protected Date createdDate;
+    @Column(name = "created_date")
+    protected long createdDate;
 
     @LastModifiedDate
     @Column(name = "updated_date")
-    @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constant.API_FORMAT_DATE_TIME)
-    protected Date updatedDate;
+    protected Long updatedDate;
 
     @PrePersist
     protected void onCreate() {
-        this.createdDate = DateUtil.convertToUTC(new Date());
+        this.createdDate = DateUtil.convertToUTC(new Date()).getTime();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        this.updatedDate = DateUtil.convertToUTC(new Date());
+        this.updatedDate = DateUtil.convertToUTC(new Date()).getTime();
     }
 
 }

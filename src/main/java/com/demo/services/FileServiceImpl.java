@@ -90,7 +90,7 @@ public class FileServiceImpl implements FileService {
                 student.setEmail(csvRecord.get("Email"));
                 student.setFirstName(csvRecord.get("First Name"));
                 student.setLastName(csvRecord.get("Last Name"));
-                student.setBob(dob);
+                student.setBob(dob.getTime());
                 student.setStatus(AppStatus.ACTIVE);
                 student.setPhoneNumber(csvRecord.get("Phone Number"));
                 student.setGender(Gender.valueOf(csvRecord.get("Gender")));
@@ -139,7 +139,7 @@ public class FileServiceImpl implements FileService {
         List<FileStudentResponse> listStudent = new ArrayList<>();
         csvPrinter.printRecord("Email", "First Name", "Last name", "Dob", "Phone Number", "Gender", "Math", "Literature", "Medium Score");
         List<String> ids = students.stream().map(Student::getId).collect(Collectors.toList());
-        List<Subject> subjects = subjectService.findAllByListStudentId(ids);
+        List<Subject> subjects = subjectService.getAllByStudentIdIn(ids);
         students.forEach(e -> {
             listStudent.add(new FileStudentResponse(e, subjects.stream().filter(subject -> subject.getStudentId().equals(e.getId())).collect(Collectors.toList())));
         });

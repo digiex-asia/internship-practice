@@ -9,6 +9,9 @@ public interface ApiPath {
     String ID = "/{id}";
     String ALL = "/all";
 
+    String LIST = "/list";
+
+    String PAGE = "/page";
     // Authenticate APIs
     String AUTHENTICATE_API = BASE_API_URL + "/auth";
     String AUTHENTICATE_RESET_PASSWORD = "/reset-password";
@@ -16,7 +19,7 @@ public interface ApiPath {
 
 
     // User APIs
-    String USER_API = BASE_API_URL + "/user";
+    String USER_API = BASE_API_URL + "/users";
 
     String SIGN_UP = "/sign-up";
     String AUTH_INFO = "/info";
@@ -32,7 +35,7 @@ public interface ApiPath {
     //Student APis
     String STUDENT_API = BASE_API_URL + "/student";
 
-    String STUDENT_TOP_3_API = STUDENT_API + "/get_top_3";
+    String STUDENT_TOP_3_API =  "/get-top-3";
 
     String PAGE_STUDENT_BY_CLASS = STUDENT_API + "/paging_student_by_class";
     String STUDENT_BY_CLASS = STUDENT_API + "/student_by_class";

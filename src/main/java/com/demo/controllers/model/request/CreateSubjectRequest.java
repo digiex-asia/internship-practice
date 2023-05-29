@@ -1,4 +1,4 @@
-package com.demo.controllers.model.request.class_;
+package com.demo.controllers.model.request;
 
 import com.demo.common.enums.AppStatus;
 import com.demo.common.utilities.ParamError;
@@ -10,7 +10,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.*;
 
 @Data
@@ -18,12 +19,20 @@ import javax.validation.constraints.*;
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CreateClassRequest {
+public class CreateSubjectRequest {
+
     @Size(max = 64, message = ParamError.MAX_LENGTH)
     @NotBlank(message = ParamError.FIELD_NAME)
     private String name;
-    @Max(value = 20, message = ParamError.MAX_VALUE)
-    @Min(value = 1, message = ParamError.MIN_VALUE)
-    private Integer max_student;
+
+    @Max(value = 10, message = ParamError.MAX_VALUE)
+    @Min(value = 0, message = ParamError.MIN_VALUE)
+    private double score;
+
+    @Max(value = 10, message = ParamError.MAX_VALUE)
+    @Min(value = 0, message = ParamError.MIN_VALUE)
+    private int numberOfLessons;
+
+
 
 }
