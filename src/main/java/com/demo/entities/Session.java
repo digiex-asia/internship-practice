@@ -25,7 +25,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Table(name = "session")
 public class Session extends BaseEntity implements Serializable {
-
     @Id
     @Column(nullable = false, updatable = false, length = 32)
     private String id;

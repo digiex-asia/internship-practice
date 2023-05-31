@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author DigiEx Group
  */
@@ -24,8 +26,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User save(User user) {
-        return userRepository.save(user);
+    public void save(User user) {
+        userRepository.save(user);
     }
 
     @Override
@@ -59,6 +61,31 @@ public class UserServiceImpl implements UserService {
         Sort sort = Sort.by(direction, properties);
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
         return userRepository.getUserPaging(AppStatus.INACTIVE, "%" + searchKey + "%", pageable);
+    }
+
+    @Override
+    public User getByEmail(String email) {
+        return userRepository.findByEmailAndStatus(email, AppStatus.ACTIVE);
+    }
+
+    @Override
+    public User getByPhoneNumber(String phoneNumber) {
+        return userRepository.findByPhoneNumberAndStatus(phoneNumber, AppStatus.ACTIVE);
+    }
+
+    @Override
+    public List<User> findAll() {
+        return userRepository.findAllByStatus(AppStatus.ACTIVE);
+    }
+
+    @Override
+    public List<UserResponse> getAll() {
+        return userRepository.getAll(AppStatus.ACTIVE);
+    }
+
+    @Override
+    public UserResponse getById(String id) {
+        return userRepository.findByIdAndStatus(id,AppStatus.ACTIVE);
     }
 
     @Override

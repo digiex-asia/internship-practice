@@ -1,12 +1,15 @@
 package com.demo.common.utilities;
 
+import com.demo.common.enums.AppStatus;
 import com.demo.common.exceptions.ApplicationException;
+import com.demo.entities.Education;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * @author DigiEx Group
@@ -97,6 +100,21 @@ public class Validator {
         }
     }
 
+    public static void checkListDuplicated(List<String> lists, List<?> lists2, String name) {
+
+
+        if (lists.size() != lists2.size()) {
+            throw new ApplicationException(RestAPIStatus.BAD_REQUEST, name + " name is duplicated");
+        }
+    }
+
+    public static void validatePhone(String phone) {
+
+        if (!phone.matches("^(\\d{8,12})$")) {
+            throw new ApplicationException(RestAPIStatus.BAD_REQUEST, "Invalid phone format");
+        }
+    }
+
     private static boolean isEmailFormat(String valueToValidate) {
         // Regex
         String regexExpression = "\\b[\\w.%-]+@[-.\\w]+\\.[A-Za-z]{2,4}\\b";
@@ -113,6 +131,7 @@ public class Validator {
             return matcher.matches();
         }
     }
+
     public static void checkFileExtensionType(MultipartFile file, String[] extensions) {
         // get extension
         String extensionType = AppUtil.getFileExtension(file);

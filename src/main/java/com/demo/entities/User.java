@@ -30,7 +30,8 @@ public class User extends BaseEntity implements Serializable {
 
     @Column(name = "email", length = 255)
     private String email;
-
+    @Column(name = "phone_number", length = 255)
+    private String phoneNumber;
     @Column(name = "password_hash", columnDefinition = "TEXT")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String passwordHash;

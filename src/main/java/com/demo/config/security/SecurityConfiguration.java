@@ -60,11 +60,11 @@ public class SecurityConfiguration {
                                         ApiPath.USER_API,"/api/user/**").permitAll()
                         .antMatchers(HttpMethod.GET, "/api/user/**").permitAll()
                                 .antMatchers(HttpMethod.PUT, ApiPath.AUTHENTICATE_API + ApiPath.AUTHENTICATE_RESET_PASSWORD + "/{reset_code}", "/api/user/**").permitAll()
-                                .anyRequest().authenticated()
+//                                .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults());
         // Custom JWT based security filter
-        httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+//        httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
 
         // disable page caching
         httpSecurity.headers().cacheControl();

@@ -12,6 +12,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 
 /**
  * @author DiGiEx Group
@@ -32,4 +34,13 @@ public interface UserRepository extends JpaRepository<User, String>, JpaSpecific
                                      @Param(value = "searchKey") String searchKey,
                                      Pageable pageable);
 
+    User findByPhoneNumberAndStatus(String phoneNumber, AppStatus active);
+
+    List<User> findAllByStatus(AppStatus active);
+
+    @Query("select new com.demo.controllers.model.response.UserResponse(user) from  User user where user.status =:status")
+    List<UserResponse> getAll(@Param(value = "status") AppStatus status);
+
+    @Query("select new com.demo.controllers.model.response.UserResponse(user) from  User user where user.id=:id and user.status =:status")
+    UserResponse findByIdAndStatus(@Param(value = "id") String id, @Param(value = "status") AppStatus active);
 }

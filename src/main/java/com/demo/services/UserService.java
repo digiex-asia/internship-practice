@@ -5,11 +5,13 @@ import com.demo.controllers.model.response.UserResponse;
 import com.demo.entities.User;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 /**
  * @author DiGiEx
  */
 public interface UserService {
-    User save(User user);
+    void save(User user);
 
     User findById(String id);
 
@@ -19,4 +21,13 @@ public interface UserService {
 
     Page<UserResponse> getPageMember(String searchKey, String sortField, boolean ascSort, int pageNumber, int pageSize);
 
+    User getByEmail(String email);
+
+    User getByPhoneNumber(String phoneNumber);
+
+    List<User> findAll();
+
+    List<UserResponse> getAll();
+
+    UserResponse getById(String id);
 }
